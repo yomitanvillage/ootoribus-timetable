@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#c0306a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>鳳バス | 読谷村コミュニティバス</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --pink-deep: #c0306a;
+  --pink-mid:  #e8528a;
+  --pink-soft: #f07aaa;
+  --pink-pale: #fde8f2;
+  --pink-faint:#fff4f9;
+  --blue-mid:  #2a6cb5;
+  --blue-pale: #e6f0fa;
+  --green-mid:  #1a6b3c;
+  
+  
+  
+  --amber:      #e8a020;
+  --amber-pale: #fff8e8;
+  --red-soft:   #dc3545;
+  --red-pale:   #fff0f0;
+  --ink:        #1a1a1a;
+  --ink-mid:    #444;
+  --ink-light:  #777;
+  --ink-faint:  #aaa;
+  --surface:    #ffffff;
+  --bg:         #f4f7f5;
+  --border:     #d8e8de;
+  --radius-sm:  6px;
+  --radius-md:  10px;
+  --radius-lg:  16px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html { font-size: 16px; }
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  min-height: 100vh;
+  overscroll-behavior: none;
+}
+
+/* ── HEADER ── */
+.header {
+  background: var(--pink-deep);
+  padding: 0 16px;
+  position: sticky; top: 0; z-index: 100;
+}
+.header-inner {
+  max-width: 480px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 56px;
+}
+.logo { display: flex; align-items: center; gap: 8px; }
+.logo-icon {
+  width: 34px; height: 34px; border-radius: 8px;
+  background: rgba(255,255,255,0.15);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+}
+.logo-text h1 { font-size: 16px; font-weight: 700; color: white; line-height: 1.2; }
+.logo-text p  { font-size: 10px; color: rgba(255,255,255,0.6); }
+.clock-box {
+  background: rgba(255,255,255,0.12);
+  border-radius: 8px; padding: 6px 10px; text-align: right;
+}
+.clock-time {
+  font-family: 'DM Mono', monospace;
+  font-size: 22px; font-weight: 500; color: white;
+  letter-spacing: 1px;
+}
+.clock-date { font-size: 10px; color: rgba(255,255,255,0.65); margin-top: 1px; }
+
+/* ── DAY TOGGLE ── */
+.day-bar {
+  background: var(--pink-deep);
+  padding: 0 16px 12px;
+}
+.day-bar-inner {
+  max-width: 480px; margin: 0 auto;
+  display: flex; gap: 6px;
+}
+.day-btn {
+  flex: 1; padding: 7px 0;
+  border: 1.5px solid rgba(255,255,255,0.25);
+  background: transparent; color: rgba(255,255,255,0.65);
+  border-radius: 7px; font-size: 12px; font-weight: 500;
+  cursor: pointer; font-family: inherit; transition: all 0.12s;
+}
+.day-btn.active {
+  background: white; color: var(--pink-deep);
+  border-color: white; font-weight: 700;
+}
+
+/* ── MAIN ── */
+.main { max-width: 480px; margin: 0 auto; padding: 14px 14px 80px; }
+
+/* ── STOP SELECTOR ── */
+.section-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.1em;
+  color: var(--ink-light); text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.stop-search-wrap {
+  position: relative; margin-bottom: 10px;
+}
+.stop-search {
+  width: 100%; padding: 10px 14px 10px 36px;
+  border: 1.5px solid var(--border); border-radius: var(--radius-md);
+  background: var(--surface); font-size: 14px; font-family: inherit;
+  color: var(--ink); outline: none; transition: border-color 0.12s;
+}
+.stop-search:focus { border-color: var(--pink-mid); }
+.stop-search-icon {
+  position: absolute; left: 11px; top: 50%; transform: translateY(-50%);
+  color: var(--ink-faint); pointer-events: none;
+}
+
+.stop-list {
+  display: flex; flex-direction: column; gap: 6px;
+  margin-bottom: 14px;
+}
+.stop-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px;
+  background: var(--surface); border-radius: var(--radius-md);
+  border: 1.5px solid var(--border); cursor: pointer;
+  transition: all 0.12s;
+}
+.stop-item:hover  { border-color: var(--pink-soft); background: var(--pink-faint); }
+.stop-item.active { border-color: var(--pink-mid); background: var(--pink-pale); }
+.stop-dist {
+  min-width: 42px; text-align: center;
+  font-family: 'DM Mono', monospace;
+}
+.stop-dist .dist-n { font-size: 16px; font-weight: 500; color: var(--pink-mid); }
+.stop-dist .dist-u { font-size: 9px; color: var(--ink-light); }
+.stop-name-wrap { flex: 1; min-width: 0; }
+.stop-name-text { font-size: 13px; font-weight: 500; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.stop-route-text { font-size: 10px; color: var(--ink-light); margin-top: 2px; }
+.stop-next-badge {
+  font-size: 11px; font-weight: 700;
+  padding: 3px 7px; border-radius: 20px; white-space: nowrap;
+}
+.badge-soon   { background: var(--red-pale); color: var(--red-soft); }
+.badge-ok     { background: var(--pink-pale); color: var(--pink-mid); }
+.badge-done   { background: #f0f0f0; color: var(--ink-light); }
+
+/* ── BUS CARDS ── */
+.cards-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 8px;
+}
+.cards-stop-name { font-size: 15px; font-weight: 700; color: var(--ink); }
+.cards-route-pill {
+  font-size: 10px; font-weight: 700; padding: 3px 8px;
+  border-radius: 20px; background: var(--pink-pale); color: var(--pink-mid);
+}
+
+.card-list { display: flex; flex-direction: column; gap: 10px; }
+
+.bus-card {
+  background: var(--surface); border-radius: var(--radius-lg);
+  border: 1.5px solid var(--border);
+  overflow: hidden; transition: border-color 0.12s;
+}
+.bus-card.is-next    { border-color: var(--pink-mid); border-width: 2px; }
+.bus-card.is-soon    { border-color: var(--amber); border-width: 2px; }
+.bus-card.is-past    { opacity: 0.42; }
+
+.card-head {
+  display: flex; align-items: center; gap: 10px;
+  padding: 11px 14px; border-bottom: 1px solid var(--border);
+}
+.card-badge-wrap { display: flex; flex-direction: column; align-items: center; min-width: 44px; }
+.card-time {
+  font-family: 'DM Mono', monospace;
+  font-size: 22px; font-weight: 500; color: var(--ink);
+  line-height: 1;
+}
+.card-wait {
+  font-size: 10px; font-weight: 700; margin-top: 3px;
+  padding: 2px 6px; border-radius: 10px;
+}
+.wait-next { background: var(--pink-mid); color: white; }
+.wait-soon { background: var(--blue-mid); color: white; }
+.wait-later { color: var(--ink-light); font-weight: 400; }
+.card-info { flex: 1; min-width: 0; }
+.card-service-id { font-size: 10px; font-weight: 700; color: var(--pink-mid); letter-spacing: 0.05em; text-transform: uppercase; }
+.card-route-line {
+  font-size: 12px; color: var(--ink-mid); margin-top: 2px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.card-toggle-btn {
+  width: 28px; height: 28px; border-radius: 50%;
+  border: 1.5px solid var(--border); background: transparent;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 14px; color: var(--ink-light);
+  transition: all 0.12s; flex-shrink: 0;
+  font-family: inherit;
+}
+.card-toggle-btn.open { background: var(--pink-pale); border-color: var(--pink-mid); color: var(--pink-mid); }
+
+/* ── STOP DETAIL ── */
+.card-stops {
+  display: none; padding: 10px 14px 12px;
+  max-height: 260px; overflow-y: auto;
+}
+.card-stops.open { display: block; }
+.stop-row {
+  display: flex; align-items: center; gap: 8px;
+  padding: 4px 0; font-size: 12px;
+}
+.stop-row.current-stop .sr-name { font-weight: 700; color: var(--pink-mid); }
+.stop-row.current-stop .sr-time { font-weight: 700; color: var(--pink-mid); }
+.stop-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  flex-shrink: 0; background: var(--border);
+}
+.stop-dot.dep   { background: var(--pink-mid); }
+.stop-dot.arr   { background: var(--pink-mid); }
+.stop-dot.cur   { background: var(--amber); width: 10px; height: 10px; }
+.sr-time { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--ink-mid); min-width: 38px; }
+.sr-name { color: var(--ink); flex: 1; }
+.sr-label {
+  font-size: 9px; font-weight: 700; padding: 1px 5px; border-radius: 4px;
+  background: var(--pink-pale); color: var(--pink-mid);
+}
+.sr-label.arr-label { background: #e8f0ff; color: #3355cc; }
+
+/* ── NOTICE ── */
+.notice-bar {
+  margin: 14px 0 0;
+  padding: 10px 12px; border-radius: var(--radius-md);
+  background: #fff0f6; border: 1px solid #f0a0c0;
+  font-size: 11px; color: #8a3060; line-height: 1.7;
+  display: flex; gap: 6px;
+}
+
+/* ── GPS BTN ── */
+
+
+/* ── EMPTY STATE ── */
+.empty-state { text-align: center; padding: 32px 0; color: var(--ink-faint); font-size: 13px; }
+.empty-icon  { font-size: 36px; margin-bottom: 10px; }
+
+
+/* ── GPSボタン ── */
+.gps-btn {
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  margin-top: 8px; width: 100%; padding: 9px;
+  border: 1.5px solid var(--pink-mid); background: transparent;
+  color: var(--pink-mid); border-radius: var(--radius-md);
+  font-size: 12px; font-weight: 700; cursor: pointer;
+  font-family: inherit; transition: background 0.12s;
+}
+.gps-btn:hover { background: var(--pink-faint); }
+.gps-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ── 距離表示 ── */
+.stop-dist { min-width: 42px; text-align: center; flex-shrink: 0; }
+.dist-n { font-size: 15px; font-weight: 700; color: var(--pink-mid); }
+.dist-u { font-size: 9px; color: var(--ink-light); }
+
+/* ── 検索プロンプト ── */
+.search-prompt {
+  text-align: center; padding: 20px 16px;
+  color: var(--ink-light); font-size: 13px; line-height: 1.9;
+}
+.search-prompt-icon { font-size: 32px; margin-bottom: 8px; }
+.search-prompt strong { color: var(--pink-mid); }
+
+/* ── 最近使ったバス停 ── */
+.recent-label {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
+  color: var(--ink-light); text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.recent-label::after {
+  content: ""; flex: 1; height: 1px; background: var(--border);
+}
+.recent-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 12px;
+  background: var(--surface); border-radius: var(--radius-md);
+  border: 1.5px solid var(--border); cursor: pointer;
+  transition: all 0.12s; margin-bottom: 6px;
+}
+.recent-item:hover { border-color: var(--pink-soft); background: var(--pink-faint); }
+.recent-item.active { border-color: var(--pink-mid); background: var(--pink-pale); }
+.recent-icon { font-size: 14px; }
+.recent-name { font-size: 13px; font-weight: 500; color: var(--ink); }
+.recent-route { font-size: 10px; color: var(--ink-light); margin-top: 2px; }
+
+/* ── 通過済み折りたたみ ── */
+.past-toggle-row {
+  display: flex; align-items: center; justify-content: center;
+  gap: 6px; padding: 7px 14px;
+  cursor: pointer; border-top: 1px solid var(--border);
+  font-size: 11px; color: var(--ink-light);
+  background: #fafafa; transition: background 0.12s;
+}
+.past-toggle-row:hover { background: var(--pink-faint); color: var(--pink-mid); }
+.past-count-badge {
+  font-size: 10px; font-weight: 700; padding: 1px 6px;
+  border-radius: 10px; background: #eee; color: var(--ink-light);
+}
+
+/* ── 時刻案内文 ── */
+.timetable-notice {
+  display: flex; align-items: flex-start; gap: 6px;
+  margin: 6px 0 4px;
+  padding: 8px 12px;
+  background: #fff8e8;
+  border: 1px solid #f0d080;
+  border-radius: var(--radius-md);
+  font-size: 11px; color: #7a5a00; line-height: 1.6;
+}
+.notice-icon { flex-shrink: 0; font-size: 13px; }
+
+/* ── もっと見るボタン ── */
+.more-btn {
+  display: flex; align-items: center; justify-content: center; gap: 5px;
+  margin-top: 8px; width: 100%; padding: 8px;
+  border: 1.5px dashed var(--border); background: transparent;
+  color: var(--ink-light); border-radius: var(--radius-md);
+  font-size: 12px; cursor: pointer; font-family: inherit;
+  transition: all 0.12s;
+}
+.more-btn:hover { border-color: var(--pink-mid); color: var(--pink-mid); background: var(--pink-faint); }
+
+/* ── ルートマップ ── */
+.route-map-wrap {
+  border-top: 1px solid var(--border);
+  padding: 10px 14px 12px;
+  background: #fafafa;
+}
+.route-map-label {
+  font-size: 10px; font-weight: 700; color: var(--ink-light);
+  letter-spacing: 0.06em; text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.route-map-scroll {
+  overflow-x: auto; -webkit-overflow-scrolling: touch;
+  padding-bottom: 4px;
+}
+.route-map-svg { display: block; }
+
+/* ── マップ表示トグル ── */
+.map-toggle-btn {
+  display: flex; align-items: center; gap: 4px;
+  font-size: 11px; color: var(--pink-mid);
+  background: none; border: none; cursor: pointer;
+  font-family: inherit; font-weight: 700; padding: 0;
+  margin-top: 4px;
+}
+
+/* ── FOOTER ── */
+.footer {
+  padding: 24px 16px; text-align: center;
+  color: var(--ink-faint); font-size: 10px; line-height: 1.9;
+}
+.footer a { color: var(--pink-mid); }
+
+/* ── DIVIDER ── */
+.divider { border: none; border-top: 1px solid var(--border); margin: 14px 0; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-up { animation: fadeUp 0.2s ease both; }
+
+/* ── サイドメニュー ── */
+.menu-overlay {
+  display: none;
+  position: fixed; inset: 0; z-index: 200;
+  background: rgba(0,0,0,0.45);
+  animation: fadeIn 0.18s ease;
+}
+.menu-overlay.open { display: block; }
+
+.side-menu {
+  position: fixed; top: 0; left: -300px; bottom: 0;
+  width: 280px; z-index: 201;
+  background: var(--surface);
+  box-shadow: 4px 0 24px rgba(0,0,0,0.18);
+  display: flex; flex-direction: column;
+  transition: left 0.22s cubic-bezier(.4,0,.2,1);
+  overflow: hidden;
+}
+.side-menu.open { left: 0; }
+
+.menu-header {
+  background: var(--pink-deep);
+  padding: 16px;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-shrink: 0;
+}
+.menu-header-title {
+  display: flex; align-items: center; gap: 8px;
+  color: white; font-size: 14px; font-weight: 700;
+}
+.menu-close-btn {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: rgba(255,255,255,0.2); border: none;
+  color: white; font-size: 16px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-family: inherit;
+}
+
+.menu-body {
+  flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
+  padding: 8px 0;
+}
+
+/* 路線アコーディオン */
+.route-group { border-bottom: 1px solid var(--border); }
+.route-group-btn {
+  width: 100%; padding: 13px 16px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: none; border: none; cursor: pointer;
+  font-family: inherit; text-align: left;
+  transition: background 0.1s;
+}
+.route-group-btn:hover { background: var(--pink-faint); }
+.route-group-btn.open  { background: var(--pink-pale); }
+.route-group-name {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 13px; font-weight: 700; color: var(--ink);
+}
+.route-dot {
+  width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+}
+.route-chevron {
+  font-size: 11px; color: var(--ink-light);
+  transition: transform 0.18s;
+}
+.route-group-btn.open .route-chevron { transform: rotate(180deg); }
+.route-count {
+  font-size: 10px; color: var(--ink-light);
+  background: var(--bg); padding: 2px 6px; border-radius: 10px;
+}
+
+/* バス停リスト */
+.stop-sub-list {
+  display: none; padding: 4px 0 8px;
+  background: var(--bg);
+}
+.stop-sub-list.open { display: block; }
+.stop-sub-item {
+  padding: 9px 16px 9px 36px;
+  font-size: 13px; color: var(--ink-mid);
+  cursor: pointer; transition: all 0.1s;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 8px;
+}
+.stop-sub-item:hover  { background: var(--pink-faint); color: var(--pink-mid); }
+.stop-sub-item.active { background: var(--pink-pale); color: var(--pink-mid); font-weight: 700; }
+.stop-sub-next {
+  font-size: 10px; font-weight: 700; white-space: nowrap;
+  padding: 2px 6px; border-radius: 10px; flex-shrink: 0;
+}
+.sub-badge-ok   { background: var(--pink-pale); color: var(--pink-mid); }
+.sub-badge-soon { background: var(--red-pale); color: var(--red-soft); }
+.sub-badge-done { background: #f0f0f0; color: var(--ink-light); }
+
+/* メニューボタン（ヘッダー） */
+.menu-open-btn {
+  width: 36px; height: 36px; border-radius: 8px;
+  background: rgba(255,255,255,0.18); border: none;
+  color: white; cursor: pointer;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 4px;
+  flex-shrink: 0;
+}
+.hamburger-line {
+  width: 16px; height: 2px; background: white; border-radius: 2px;
+}
+
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+</style>
+</head>
+<body>
+
+<!-- サイドメニュー -->
+<div class="menu-overlay" id="menu-overlay" onclick="closeMenu()"></div>
+<div class="side-menu" id="side-menu">
+  <div class="menu-header">
+    <div class="menu-header-title"><img src="data:image/png;base64,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" width="28" height="28" style="border-radius:50%" alt=""> バス停から選ぶ</div>
+    <button class="menu-close-btn" onclick="closeMenu()">✕</button>
+  </div>
+  <div class="menu-body" id="menu-body"></div>
+</div>
+
+<div class="header">
+  <div class="header-inner">
+    <button class="menu-open-btn" onclick="openMenu()" aria-label="メニューを開く">
+        <div class="hamburger-line"></div>
+        <div class="hamburger-line"></div>
+        <div class="hamburger-line"></div>
+      </button>
+      <div class="logo">
+      <img src="data:image/png;base64,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" width="36" height="36" style="border-radius:50%;flex-shrink:0" alt="鳳バスロゴ">
+      <div class="logo-text">
+        <h1>鳳バス</h1>
+        <p>読谷村コミュニティバス</p>
+      </div>
+    </div>
+    <div class="clock-box">
+      <div class="clock-time" id="clock">--:--</div>
+      <div class="clock-date" id="clock-date">---</div>
+    </div>
+  </div>
+</div>
+<div class="day-bar">
+  <div class="day-bar-inner">
+    <button class="day-btn" id="btn-weekday" onclick="setDay('weekday')">平日</button>
+    <button class="day-btn" id="btn-holiday" onclick="setDay('holiday')">土日・祝日</button>
+  </div>
+</div>
+
+<div class="main">
+  <div class="section-label">バス停を検索</div>
+
+  <div class="stop-search-wrap">
+    <svg class="stop-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input class="stop-search" type="search" placeholder="バス停名を入力（例：読谷バスターミナル）" id="stop-search" oninput="renderStops()" autocomplete="off">
+  </div>
+
+  <div class="stop-list" id="stop-list"></div>
+
+
+
+  <hr class="divider">
+
+  <button class="gps-btn" id="gps-btn" onclick="refreshGPS()">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+      <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/>
+      <line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/>
+      <line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/>
+    </svg>
+    現在地から近いバス停を探す
+  </button>
+  <div id="recent-area"></div>
+
+  <div id="cards-area">
+    <div class="empty-state">
+      <div class="empty-icon">🚏</div>
+      上のリストからバス停を選んでください
+    </div>
+  </div>
+
+  <div class="notice-bar">
+    <span>⚠️</span>
+    <span>台風時は沖縄バスに準じ運休。年末年始（12/29〜1/3）・慰霊の日（6/23）は休日南北ルートのみ運行。</span>
+  </div>
+
+  <div class="footer">
+    時刻表：令和2年5月15日改定版<br>
+    お問い合わせ：読谷村役場 生活環境課 <a href="tel:0989829214">098-982-9214</a><br>
+    沖縄バス 読谷出張所 <a href="tel:0989582015">098-958-2015</a>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   時刻表データ（全ルート確定版）
+   ═══════════════════════════════════════════════════════════ */
+const ROUTES = {
+  weekday: [
+    // ── 北ルート ─────────────────────────────────────────
+    {id:"北1",label:"北ルート 1便",route:"北ルート",dep:"読谷バスターミナル",arr:"JAゆんた市場",dur:55,stops:[
+      ["読谷バスターミナル","07:10"],["瀬名波入口","07:11"],["長浜吹出原","07:14"],["長浜公民館西","07:17"],["船地原","07:18"],["川平","07:19"],["瀬名波","07:21"],["渡慶次小学校","07:23"],["渡慶次公民館","07:24"],["宇座","07:26"],["儀間","07:29"],["渡慶次寺原","07:32"],["儀間公民館前","07:34"],["高志保","07:36"],["高志保入口","07:37"],["波平","07:38"],["波平仲石良原","07:39"],["大当","07:41"],["読谷診療所前","07:44"],["都屋","07:45"],["楚辺中道","07:48"],["都屋中道","07:51"],["読谷中学校前","08:01"],["読谷村役場","08:02"],["健康増進センター","08:03"],["JAゆんた市場","08:05"]]},
+    {id:"北2",label:"北ルート 2便",route:"北ルート",dep:"JAゆんた市場",arr:"JAゆんた市場",dur:56,stops:[
+      ["JAゆんた市場","08:15"],["読谷村役場","08:17"],["健康増進センター","08:18"],["読谷中学校前","08:20"],["都屋","08:25"],["読谷診療所前","08:26"],["大当","08:27"],["波平仲石良原","08:29"],["波平","08:30"],["高志保入口","08:31"],["高志保","08:32"],["宇座公民館前","08:33"],["長浜吹出原","08:36"],["長浜公民館西","08:39"],["船地原","08:40"],["川平","08:41"],["瀬名波","08:43"],["渡慶次小学校","08:45"],["渡慶次公民館","08:46"],["宇座","08:49"],["儀間","08:52"],["渡慶次寺原","08:55"],["儀間公民館前","08:57"],["高志保","08:59"],["高志保入口","09:00"],["旧役場前","09:01"],["イオンタウン読谷座喜味","09:04"],["福祉センター","09:06"],["読谷村役場","09:08"],["健康増進センター","09:09"],["JAゆんた市場","09:11"]]},
+    {id:"北3",label:"北ルート 3便",route:"北ルート",dep:"JAゆんた市場",arr:"JAゆんた市場",dur:56,stops:[
+      ["JAゆんた市場","09:45"],["読谷村役場","09:47"],["健康増進センター","09:48"],["読谷中学校前","09:50"],["都屋","09:55"],["読谷診療所前","09:56"],["大当","09:57"],["波平仲石良原","09:59"],["波平","10:00"],["高志保入口","10:01"],["高志保","10:02"],["宇座公民館前","10:03"],["長浜吹出原","10:06"],["長浜公民館西","10:09"],["船地原","10:10"],["川平","10:11"],["瀬名波","10:13"],["渡慶次小学校","10:15"],["渡慶次公民館","10:16"],["宇座","10:19"],["儀間","10:22"],["渡慶次寺原","10:25"],["儀間公民館前","10:27"],["高志保","10:29"],["高志保入口","10:30"],["旧役場前","10:31"],["イオンタウン読谷座喜味","10:34"],["福祉センター","10:36"],["読谷村役場","10:38"],["健康増進センター","10:39"],["JAゆんた市場","10:41"]]},
+    {id:"北4",label:"北ルート 4便",route:"北ルート",dep:"JAゆんた市場",arr:"JAゆんた市場",dur:56,stops:[
+      ["JAゆんた市場","10:50"],["読谷村役場","10:52"],["健康増進センター","10:53"],["読谷中学校前","10:55"],["都屋","11:00"],["読谷診療所前","11:01"],["大当","11:02"],["波平仲石良原","11:04"],["波平","11:05"],["高志保入口","11:06"],["高志保","11:07"],["宇座公民館前","11:08"],["長浜吹出原","11:11"],["長浜公民館西","11:14"],["船地原","11:15"],["川平","11:16"],["瀬名波","11:18"],["渡慶次小学校","11:20"],["渡慶次公民館","11:21"],["宇座","11:24"],["儀間","11:27"],["渡慶次寺原","11:30"],["儀間公民館前","11:32"],["高志保","11:34"],["高志保入口","11:35"],["旧役場前","11:36"],["イオンタウン読谷座喜味","11:39"],["福祉センター","11:41"],["読谷村役場","11:43"],["健康増進センター","11:44"],["JAゆんた市場","11:46"]]},
+    {id:"北5",label:"北ルート 5便",route:"北ルート",dep:"JAゆんた市場",arr:"読谷バスターミナル",dur:59,stops:[
+      ["JAゆんた市場","12:03"],["読谷村役場","12:05"],["健康増進センター","12:06"],["読谷中学校前","12:08"],["都屋","12:13"],["読谷診療所前","12:14"],["大当","12:15"],["波平仲石良原","12:18"],["波平","12:19"],["高志保入口","12:20"],["高志保","12:21"],["宇座公民館前","12:22"],["長浜吹出原","12:25"],["長浜公民館西","12:28"],["船地原","12:29"],["川平","12:30"],["瀬名波","12:32"],["渡慶次小学校","12:34"],["渡慶次公民館","12:35"],["宇座","12:38"],["儀間","12:41"],["渡慶次寺原","12:44"],["儀間公民館前","12:47"],["瀬名波入口","13:01"],["読谷バスターミナル","13:02"]]},
+    {id:"北X",label:"北ルート 交代便",route:"北ルート",dep:"読谷バスターミナル",arr:"JAゆんた市場",dur:15,stops:[
+      ["読谷バスターミナル","13:30"],["瀬名波入口","13:31"],["宇座公民館前","13:32"],["高志保","13:33"],["高志保入口","13:34"],["旧役場前","13:35"],["イオンタウン読谷座喜味","13:38"],["福祉センター","13:40"],["読谷村役場","13:42"],["健康増進センター","13:43"],["JAゆんた市場","13:45"]]},
+    {id:"北6",label:"北ルート 6便",route:"北ルート",dep:"JAゆんた市場",arr:"JAゆんた市場",dur:56,stops:[
+      ["JAゆんた市場","13:45"],["読谷村役場","13:47"],["健康増進センター","13:48"],["読谷中学校前","13:50"],["都屋","13:55"],["読谷診療所前","13:56"],["大当","13:57"],["波平仲石良原","13:59"],["波平","14:00"],["高志保入口","14:01"],["高志保","14:02"],["宇座公民館前","14:03"],["長浜吹出原","14:06"],["長浜公民館西","14:09"],["船地原","14:10"],["川平","14:11"],["瀬名波","14:13"],["渡慶次小学校","14:15"],["渡慶次公民館","14:16"],["宇座","14:19"],["儀間","14:22"],["渡慶次寺原","14:25"],["儀間公民館前","14:27"],["高志保","14:29"],["高志保入口","14:30"],["旧役場前","14:31"],["イオンタウン読谷座喜味","14:34"],["福祉センター","14:36"],["読谷村役場","14:38"],["健康増進センター","14:39"],["JAゆんた市場","14:41"]]},
+    {id:"北7",label:"北ルート 7便",route:"北ルート",dep:"JAゆんた市場",arr:"JAゆんた市場",dur:56,stops:[
+      ["JAゆんた市場","14:56"],["読谷村役場","14:58"],["健康増進センター","14:59"],["読谷中学校前","15:01"],["都屋","15:06"],["読谷診療所前","15:07"],["大当","15:08"],["波平仲石良原","15:10"],["波平","15:11"],["高志保入口","15:12"],["高志保","15:13"],["宇座公民館前","15:14"],["長浜吹出原","15:17"],["長浜公民館西","15:20"],["船地原","15:21"],["川平","15:22"],["瀬名波","15:24"],["渡慶次小学校","15:26"],["渡慶次公民館","15:27"],["宇座","15:30"],["儀間","15:33"],["渡慶次寺原","15:36"],["儀間公民館前","15:38"],["高志保","15:40"],["高志保入口","15:41"],["旧役場前","15:42"],["イオンタウン読谷座喜味","15:45"],["福祉センター","15:47"],["読谷村役場","15:49"],["健康増進センター","15:50"],["JAゆんた市場","15:52"]]},
+    {id:"北8",label:"北ルート 8便",route:"北ルート",dep:"JAゆんた市場",arr:"JAゆんた市場",dur:56,stops:[
+      ["JAゆんた市場","16:15"],["読谷村役場","16:17"],["健康増進センター","16:18"],["読谷中学校前","16:20"],["都屋","16:25"],["読谷診療所前","16:26"],["大当","16:27"],["波平仲石良原","16:29"],["波平","16:30"],["高志保入口","16:31"],["高志保","16:32"],["宇座公民館前","16:33"],["長浜吹出原","16:36"],["長浜公民館西","16:39"],["船地原","16:40"],["川平","16:41"],["瀬名波","16:43"],["渡慶次小学校","16:45"],["渡慶次公民館","16:46"],["宇座","16:49"],["儀間","16:52"],["渡慶次寺原","16:55"],["儀間公民館前","16:57"],["高志保","16:59"],["高志保入口","17:00"],["旧役場前","17:01"],["イオンタウン読谷座喜味","17:04"],["福祉センター","17:06"],["読谷村役場","17:08"],["健康増進センター","17:09"],["JAゆんた市場","17:11"]]},
+    {id:"北9",label:"北ルート 9便",route:"北ルート",dep:"JAゆんた市場",arr:"JAゆんた市場",dur:56,stops:[
+      ["JAゆんた市場","17:30"],["読谷村役場","17:32"],["健康増進センター","17:33"],["読谷中学校前","17:35"],["都屋","17:40"],["読谷診療所前","17:41"],["大当","17:42"],["波平仲石良原","17:44"],["波平","17:45"],["高志保入口","17:46"],["高志保","17:47"],["宇座公民館前","17:48"],["長浜吹出原","17:51"],["長浜公民館西","17:54"],["船地原","17:55"],["川平","17:56"],["瀬名波","17:58"],["渡慶次小学校","18:00"],["渡慶次公民館","18:01"],["宇座","18:04"],["儀間","18:07"],["渡慶次寺原","18:10"],["儀間公民館前","18:12"],["高志保","18:14"],["高志保入口","18:15"],["旧役場前","18:16"],["イオンタウン読谷座喜味","18:19"],["福祉センター","18:21"],["読谷村役場","18:23"],["健康増進センター","18:24"],["JAゆんた市場","18:26"]]},
+    {id:"北10",label:"北ルート 10便",route:"北ルート",dep:"JAゆんた市場",arr:"健康増進センター",dur:56,stops:[
+      ["JAゆんた市場","18:40"],["読谷村役場","18:42"],["健康増進センター","18:43"],["読谷中学校前","18:45"],["都屋","18:50"],["読谷診療所前","18:51"],["大当","18:52"],["波平仲石良原","18:54"],["波平","18:55"],["高志保入口","18:56"],["高志保","18:57"],["宇座公民館前","18:58"],["長浜吹出原","19:01"],["長浜公民館西","19:04"],["船地原","19:05"],["川平","19:06"],["瀬名波","19:08"],["渡慶次小学校","19:10"],["渡慶次公民館","19:11"],["宇座","19:14"],["儀間","19:17"],["渡慶次寺原","19:20"],["儀間公民館前","19:22"],["高志保","19:24"],["高志保入口","19:25"],["旧役場前","19:26"],["イオンタウン読谷座喜味","19:29"],["福祉センター","19:31"],["読谷村役場","19:33"],["健康増進センター","19:34"]]},
+    {id:"北11",label:"北ルート 11便",route:"北ルート",dep:"読谷村役場",arr:"読谷バスターミナル",dur:47,stops:[
+      ["読谷村役場","19:39"],["健康増進センター","19:40"],["読谷中学校前","19:42"],["都屋","19:47"],["読谷診療所前","19:48"],["大当","19:49"],["波平仲石良原","19:51"],["波平","19:52"],["高志保入口","19:53"],["高志保","19:54"],["宇座公民館前","19:55"],["長浜吹出原","19:58"],["長浜公民館西","20:01"],["船地原","20:02"],["川平","20:03"],["瀬名波","20:05"],["渡慶次小学校","20:07"],["渡慶次公民館","20:08"],["宇座","20:11"],["儀間","20:14"],["渡慶次寺原","20:17"],["儀間公民館前","20:19"],["読谷バスターミナル","20:26"]]},
+
+    // ── 西ルート ─────────────────────────────────────────
+    {id:"西始",label:"西ルート 始発便",route:"西ルート",dep:"読谷バスターミナル",arr:"読谷村役場",dur:12,stops:[
+      ["読谷バスターミナル","06:47"],["瀬名波入口","06:48"],["宇座公民館前","06:49"],["高志保","06:50"],["高志保入口","06:51"],["旧役場前","06:52"],["イオンタウン読谷座喜味","06:55"],["福祉センター","06:56"],["健康増進センター","06:58"],["読谷村役場","06:59"]]},
+    {id:"西1",label:"西ルート 1便",route:"西ルート",dep:"読谷村役場",arr:"JAゆんた市場",dur:74,stops:[
+      ["読谷村役場","06:59"],["健康増進センター","07:00"],["読谷中学校前","07:01"],["波平仲石良原","07:07"],["大当","07:09"],["読谷診療所前","07:10"],["都屋中道","07:13"],["楚辺中道","07:15"],["楚辺","07:17"],["大添","07:20"],["赤犬子宮前","07:22"],["古堅小学校入口","07:25"],["古堅皆呉原","07:32"],["渡具知","07:34"],["渡具知公民館前","07:37"],["渡具知後原","07:40"],["イオンタウン読谷","07:50"],["古堅南小学校","07:52"],["大湾西原","07:54"],["大木南","07:56"],["伊良皆（県道6号線）","08:00"],["伊良皆（国道58号）","08:02"],["読谷村役場","08:10"],["健康増進センター","08:11"],["JAゆんた市場","08:13"]]},
+    {id:"西2",label:"西ルート 2便",route:"西ルート",dep:"JAゆんた市場",arr:"JAゆんた市場",dur:83,stops:[
+      ["JAゆんた市場","08:25"],["読谷村役場","08:27"],["健康増進センター","08:28"],["読谷中学校前","08:30"],["波平仲石良原","08:36"],["大当","08:38"],["読谷診療所前","08:39"],["都屋中道","08:42"],["楚辺中道","08:44"],["楚辺","08:46"],["大添","08:49"],["赤犬子宮前","08:51"],["古堅小学校入口","08:53"],["イオンタウン読谷","08:58"],["イオンタウン読谷","09:08"],["古堅南小学校","09:10"],["大湾西原","09:12"],["大木南","09:14"],["伊良皆（県道6号線）","09:17"],["伊良皆（国道58号）","09:19"],["喜名公民館前","09:25"],["親志入口","09:28"],["シーレイク座喜味","09:30"],["横田公園","09:36"],["親志公民館西","09:38"],["座喜味入口","09:39"],["座喜味","09:41"],["福祉センター","09:43"],["読谷村役場","09:45"],["健康増進センター","09:46"],["JAゆんた市場","09:48"]]},
+    {id:"西3",label:"西ルート 3便",route:"西ルート",dep:"JAゆんた市場",arr:"JAゆんた市場",dur:83,stops:[
+      ["JAゆんた市場","10:20"],["読谷村役場","10:22"],["健康増進センター","10:23"],["読谷中学校前","10:25"],["波平仲石良原","10:31"],["大当","10:33"],["読谷診療所前","10:34"],["都屋中道","10:37"],["楚辺中道","10:39"],["楚辺","10:41"],["大添","10:44"],["赤犬子宮前","10:46"],["古堅小学校入口","10:48"],["イオンタウン読谷","10:53"],["イオンタウン読谷","11:03"],["古堅南小学校","11:05"],["大湾西原","11:07"],["大木南","11:09"],["伊良皆（県道6号線）","11:12"],["伊良皆（国道58号）","11:14"],["喜名公民館前","11:20"],["親志入口","11:23"],["シーレイク座喜味","11:25"],["横田公園","11:31"],["親志公民館西","11:33"],["座喜味入口","11:34"],["座喜味","11:36"],["福祉センター","11:38"],["読谷村役場","11:40"],["健康増進センター","11:41"],["JAゆんた市場","11:43"]]},
+    {id:"西XA",label:"西ルート 交代便(JA→読谷BT)",route:"西ルート",dep:"JAゆんた市場",arr:"読谷バスターミナル",dur:14,stops:[
+      ["JAゆんた市場","11:55"],["読谷村役場","11:57"],["健康増進センター","11:58"],["読谷中学校前","12:00"],["イオンタウン読谷座喜味","12:03"],["旧役場前","12:04"],["高志保入口","12:05"],["高志保","12:06"],["宇座公民館前","12:07"],["瀬名波入口","12:08"],["読谷バスターミナル","12:09"]]},
+    {id:"西XB",label:"西ルート 交代便(読谷BT→JA)",route:"西ルート",dep:"読谷バスターミナル",arr:"JAゆんた市場",dur:15,stops:[
+      ["読谷バスターミナル","13:00"],["瀬名波入口","13:01"],["宇座公民館前","13:02"],["高志保","13:03"],["高志保入口","13:04"],["旧役場前","13:05"],["イオンタウン読谷座喜味","13:08"],["福祉センター","13:09"],["読谷村役場","13:10"],["健康増進センター","13:11"],["JAゆんた市場","13:15"]]},
+    {id:"西4",label:"西ルート 4便",route:"西ルート",dep:"JAゆんた市場",arr:"JAゆんた市場",dur:83,stops:[
+      ["JAゆんた市場","13:15"],["読谷村役場","13:17"],["健康増進センター","13:18"],["読谷中学校前","13:20"],["波平仲石良原","13:26"],["大当","13:28"],["読谷診療所前","13:29"],["都屋中道","13:32"],["楚辺中道","13:34"],["楚辺","13:36"],["大添","13:39"],["赤犬子宮前","13:41"],["古堅小学校入口","13:43"],["イオンタウン読谷","13:48"],["イオンタウン読谷","13:58"],["古堅南小学校","14:00"],["大湾西原","14:02"],["大木南","14:04"],["伊良皆（県道6号線）","14:07"],["伊良皆（国道58号）","14:09"],["喜名公民館前","14:15"],["親志入口","14:18"],["シーレイク座喜味","14:20"],["横田公園","14:26"],["親志公民館西","14:28"],["座喜味入口","14:29"],["座喜味","14:31"],["福祉センター","14:33"],["読谷村役場","14:35"],["健康増進センター","14:36"],["JAゆんた市場","14:38"]]},
+    {id:"西5",label:"西ルート 5便",route:"西ルート",dep:"JAゆんた市場",arr:"JAゆんた市場",dur:83,stops:[
+      ["JAゆんた市場","14:48"],["読谷村役場","14:50"],["健康増進センター","14:51"],["読谷中学校前","14:53"],["波平仲石良原","14:59"],["大当","15:01"],["読谷診療所前","15:02"],["都屋中道","15:05"],["楚辺中道","15:07"],["楚辺","15:09"],["大添","15:12"],["赤犬子宮前","15:14"],["古堅小学校入口","15:16"],["イオンタウン読谷","15:21"],["イオンタウン読谷","15:31"],["古堅南小学校","15:33"],["大湾西原","15:35"],["大木南","15:37"],["伊良皆（県道6号線）","15:40"],["伊良皆（国道58号）","15:42"],["喜名公民館前","15:48"],["親志入口","15:51"],["シーレイク座喜味","15:53"],["横田公園","15:59"],["親志公民館西","16:01"],["座喜味入口","16:02"],["座喜味","16:04"],["福祉センター","16:06"],["読谷村役場","16:08"],["健康増進センター","16:09"],["JAゆんた市場","16:11"]]},
+    {id:"西6",label:"西ルート 6便",route:"西ルート",dep:"JAゆんた市場",arr:"JAゆんた市場",dur:83,stops:[
+      ["JAゆんた市場","16:47"],["読谷村役場","16:49"],["健康増進センター","16:50"],["読谷中学校前","16:52"],["波平仲石良原","16:58"],["大当","17:00"],["読谷診療所前","17:01"],["都屋中道","17:04"],["楚辺中道","17:06"],["楚辺","17:08"],["大添","17:11"],["赤犬子宮前","17:13"],["古堅小学校入口","17:15"],["イオンタウン読谷","17:20"],["イオンタウン読谷","17:30"],["古堅南小学校","17:32"],["大湾西原","17:34"],["大木南","17:36"],["伊良皆（県道6号線）","17:39"],["伊良皆（国道58号）","17:41"],["喜名公民館前","17:47"],["親志入口","17:50"],["シーレイク座喜味","17:52"],["横田公園","17:58"],["親志公民館西","18:00"],["座喜味入口","18:01"],["座喜味","18:03"],["福祉センター","18:05"],["読谷村役場","18:07"],["健康増進センター","18:08"],["JAゆんた市場","18:10"]]},
+    {id:"西7",label:"西ルート 7便",route:"西ルート",dep:"JAゆんた市場",arr:"健康増進センター",dur:83,stops:[
+      ["JAゆんた市場","18:22"],["読谷村役場","18:24"],["健康増進センター","18:25"],["読谷中学校前","18:27"],["波平仲石良原","18:33"],["大当","18:35"],["読谷診療所前","18:36"],["都屋中道","18:39"],["楚辺中道","18:41"],["楚辺","18:43"],["大添","18:46"],["赤犬子宮前","18:48"],["古堅小学校入口","18:50"],["イオンタウン読谷","18:55"],["イオンタウン読谷","19:05"],["古堅南小学校","19:07"],["大湾西原","19:09"],["大木南","19:11"],["伊良皆（県道6号線）","19:14"],["伊良皆（国道58号）","19:16"],["喜名公民館前","19:22"],["親志入口","19:25"],["シーレイク座喜味","19:27"],["横田公園","19:33"],["親志公民館西","19:35"],["座喜味入口","19:36"],["座喜味","19:38"],["福祉センター","19:40"],["読谷村役場","19:42"],["健康増進センター","19:43"]]},
+    {id:"西末",label:"西ルート 最終便",route:"西ルート",dep:"JAゆんた市場",arr:"読谷バスターミナル",dur:14,stops:[
+      ["JAゆんた市場","19:10"],["健康増進センター","19:12"],["読谷中学校前","19:13"],["イオンタウン読谷座喜味","19:15"],["旧役場前","19:18"],["高志保入口","19:19"],["高志保","19:20"],["宇座公民館前","19:21"],["瀬名波入口","19:22"],["読谷バスターミナル","19:24"]]},
+
+    // ── 南ルート ─────────────────────────────────────────
+    {id:"南始",label:"南ルート 始発便",route:"南ルート",dep:"読谷バスターミナル",arr:"読谷村役場",dur:12,stops:[
+      ["読谷バスターミナル","07:20"],["瀬名波入口","07:21"],["宇座公民館前","07:22"],["高志保","07:23"],["高志保入口","07:24"],["旧役場前","07:25"],["イオンタウン読谷座喜味","07:28"],["読谷中学校前","07:30"],["健康増進センター","07:31"],["読谷村役場","07:32"]]},
+    {id:"南1",label:"南ルート 1便",route:"南ルート",dep:"読谷村役場",arr:"JAゆんた市場",dur:34,stops:[
+      ["読谷村役場","07:32"],["健康増進センター","07:33"],["喜名公民館前","07:41"],["喜名","07:43"],["親志入口","07:44"],["シーレイク座喜味","07:48"],["横田公園","07:54"],["親志公民館西","07:56"],["座喜味入口","07:57"],["座喜味","07:59"],["福祉センター","08:01"],["読谷中学校前","08:02"],["読谷村役場","08:03"],["健康増進センター","08:04"],["JAゆんた市場","08:06"]]},
+    {id:"南2",label:"南ルート 2便",route:"南ルート",dep:"JAゆんた市場",arr:"JAゆんた市場",dur:69,stops:[
+      ["JAゆんた市場","08:20"],["読谷村役場","08:22"],["健康増進センター","08:23"],["伊良皆（県道6号線）","08:28"],["大木中道","08:29"],["県営比謝団地南","08:30"],["サンエー大湾シティ","08:35"],["比謝公民館前","08:36"],["大湾公民館前","08:37"],["古堅皆呉原","08:39"],["渡具知","08:43"],["渡具知公民館前","08:44"],["渡具知後原","08:47"],["イオンタウン読谷","08:50"],["イオンタウン読谷","09:00"],["古堅小学校入口","09:06"],["赤犬子宮前","09:08"],["大添","09:09"],["楚辺","09:10"],["楚辺中道","09:11"],["都屋中道","09:12"],["都屋","09:14"],["読谷診療所前","09:15"],["大当","09:16"],["波平仲石良原","09:18"],["読谷中学校前","09:24"],["読谷村役場","09:26"],["健康増進センター","09:27"],["JAゆんた市場","09:29"]]},
+    {id:"南3",label:"南ルート 3便",route:"南ルート",dep:"JAゆんた市場",arr:"JAゆんた市場",dur:69,stops:[
+      ["JAゆんた市場","09:40"],["読谷村役場","09:42"],["健康増進センター","09:43"],["伊良皆（県道6号線）","09:48"],["大木中道","09:49"],["県営比謝団地南","09:50"],["サンエー大湾シティ","09:55"],["比謝公民館前","09:56"],["大湾公民館前","09:57"],["古堅皆呉原","09:59"],["渡具知","10:03"],["渡具知公民館前","10:04"],["渡具知後原","10:07"],["イオンタウン読谷","10:10"],["イオンタウン読谷","10:20"],["古堅小学校入口","10:26"],["赤犬子宮前","10:28"],["大添","10:29"],["楚辺","10:30"],["楚辺中道","10:31"],["都屋中道","10:32"],["都屋","10:33"],["読谷診療所前","10:35"],["大当","10:36"],["波平仲石良原","10:38"],["読谷中学校前","10:44"],["読谷村役場","10:46"],["健康増進センター","10:47"],["JAゆんた市場","10:49"]]},
+    {id:"南4",label:"南ルート 4便",route:"南ルート",dep:"JAゆんた市場",arr:"JAゆんた市場",dur:69,stops:[
+      ["JAゆんた市場","11:20"],["読谷村役場","11:22"],["健康増進センター","11:23"],["伊良皆（県道6号線）","11:28"],["大木中道","11:29"],["県営比謝団地南","11:30"],["サンエー大湾シティ","11:35"],["比謝公民館前","11:36"],["大湾公民館前","11:37"],["古堅皆呉原","11:39"],["渡具知","11:43"],["渡具知公民館前","11:44"],["渡具知後原","11:47"],["イオンタウン読谷","11:50"],["イオンタウン読谷","12:00"],["古堅小学校入口","12:06"],["赤犬子宮前","12:08"],["大添","12:09"],["楚辺","12:10"],["楚辺中道","12:11"],["都屋中道","12:12"],["都屋","12:13"],["読谷診療所前","12:15"],["大当","12:16"],["波平仲石良原","12:18"],["読谷中学校前","12:24"],["読谷村役場","12:26"],["健康増進センター","12:27"],["JAゆんた市場","12:29"]]},
+    {id:"南XA",label:"南ルート 交代便(JA→読谷BT)",route:"南ルート",dep:"JAゆんた市場",arr:"読谷バスターミナル",dur:14,stops:[
+      ["JAゆんた市場","12:30"],["読谷村役場","12:32"],["健康増進センター","12:33"],["読谷中学校前","12:35"],["イオンタウン読谷座喜味","12:38"],["旧役場前","12:39"],["高志保入口","12:40"],["高志保","12:41"],["宇座公民館前","12:42"],["瀬名波入口","12:43"],["読谷バスターミナル","12:44"]]},
+    {id:"南XB",label:"南ルート 交代便(読谷BT→JA)",route:"南ルート",dep:"読谷バスターミナル",arr:"JAゆんた市場",dur:15,stops:[
+      ["読谷バスターミナル","13:25"],["瀬名波入口","13:26"],["宇座公民館前","13:27"],["高志保","13:28"],["高志保入口","13:29"],["旧役場前","13:30"],["イオンタウン読谷座喜味","13:33"],["福祉センター","13:35"],["読谷村役場","13:36"],["健康増進センター","13:37"],["JAゆんた市場","13:40"]]},
+    {id:"南5",label:"南ルート 5便",route:"南ルート",dep:"JAゆんた市場",arr:"JAゆんた市場",dur:69,stops:[
+      ["JAゆんた市場","13:40"],["読谷村役場","13:42"],["健康増進センター","13:43"],["伊良皆（県道6号線）","13:48"],["大木中道","13:49"],["県営比謝団地南","13:50"],["サンエー大湾シティ","13:55"],["比謝公民館前","13:56"],["大湾公民館前","13:57"],["古堅皆呉原","13:59"],["渡具知","14:03"],["渡具知公民館前","14:04"],["渡具知後原","14:07"],["イオンタウン読谷","14:10"],["イオンタウン読谷","14:20"],["古堅小学校入口","14:26"],["赤犬子宮前","14:28"],["大添","14:29"],["楚辺","14:30"],["楚辺中道","14:31"],["都屋中道","14:32"],["都屋","14:33"],["読谷診療所前","14:35"],["大当","14:36"],["波平仲石良原","14:38"],["読谷中学校前","14:44"],["読谷村役場","14:46"],["健康増進センター","14:47"],["JAゆんた市場","14:49"]]},
+    {id:"南6",label:"南ルート 6便",route:"南ルート",dep:"JAゆんた市場",arr:"JAゆんた市場",dur:69,stops:[
+      ["JAゆんた市場","15:00"],["読谷村役場","15:02"],["健康増進センター","15:03"],["伊良皆（県道6号線）","15:08"],["大木中道","15:09"],["県営比謝団地南","15:10"],["サンエー大湾シティ","15:15"],["比謝公民館前","15:16"],["大湾公民館前","15:17"],["古堅皆呉原","15:19"],["渡具知","15:23"],["渡具知公民館前","15:24"],["渡具知後原","15:27"],["イオンタウン読谷","15:30"],["イオンタウン読谷","15:40"],["古堅小学校入口","15:46"],["赤犬子宮前","15:48"],["大添","15:49"],["楚辺","15:50"],["楚辺中道","15:51"],["都屋中道","15:52"],["都屋","15:53"],["読谷診療所前","15:55"],["大当","15:56"],["波平仲石良原","15:58"],["読谷中学校前","16:04"],["読谷村役場","16:06"],["健康増進センター","16:07"],["JAゆんた市場","16:09"]]},
+    {id:"南7",label:"南ルート 7便",route:"南ルート",dep:"JAゆんた市場",arr:"JAゆんた市場",dur:69,stops:[
+      ["JAゆんた市場","16:40"],["読谷村役場","16:42"],["健康増進センター","16:43"],["伊良皆（県道6号線）","16:48"],["大木中道","16:49"],["県営比謝団地南","16:50"],["サンエー大湾シティ","16:55"],["比謝公民館前","16:56"],["大湾公民館前","16:57"],["古堅皆呉原","16:59"],["渡具知","17:03"],["渡具知公民館前","17:04"],["渡具知後原","17:07"],["イオンタウン読谷","17:10"],["イオンタウン読谷","17:20"],["古堅小学校入口","17:26"],["赤犬子宮前","17:28"],["大添","17:29"],["楚辺","17:30"],["楚辺中道","17:31"],["都屋中道","17:32"],["都屋","17:33"],["読谷診療所前","17:35"],["大当","17:36"],["波平仲石良原","17:38"],["読谷中学校前","17:44"],["読谷村役場","17:46"],["健康増進センター","17:47"],["JAゆんた市場","17:49"]]},
+    {id:"南8",label:"南ルート 8便",route:"南ルート",dep:"JAゆんた市場",arr:"JAゆんた市場",dur:69,stops:[
+      ["JAゆんた市場","18:00"],["読谷村役場","18:02"],["健康増進センター","18:03"],["伊良皆（県道6号線）","18:08"],["大木中道","18:09"],["県営比謝団地南","18:10"],["サンエー大湾シティ","18:15"],["比謝公民館前","18:16"],["大湾公民館前","18:17"],["古堅皆呉原","18:19"],["渡具知","18:23"],["渡具知公民館前","18:24"],["渡具知後原","18:27"],["イオンタウン読谷","18:30"],["イオンタウン読谷","18:40"],["古堅小学校入口","18:46"],["赤犬子宮前","18:48"],["大添","18:49"],["楚辺","18:50"],["楚辺中道","18:51"],["都屋中道","18:52"],["都屋","18:53"],["読谷診療所前","18:55"],["大当","18:56"],["波平仲石良原","18:58"],["読谷中学校前","19:04"],["読谷村役場","19:06"],["健康増進センター","19:07"],["JAゆんた市場","19:09"]]},
+    {id:"南末",label:"南ルート 最終便",route:"南ルート",dep:"JAゆんた市場",arr:"読谷バスターミナル",dur:14,stops:[
+      ["JAゆんた市場","19:46"],["健康増進センター","19:47"],["読谷中学校前","19:49"],["イオンタウン読谷座喜味","19:52"],["旧役場前","19:53"],["高志保入口","19:54"],["高志保","19:55"],["宇座公民館前","19:56"],["瀬名波入口","19:57"],["読谷バスターミナル","19:58"]]},
+  ],
+  holiday: [
+    {id:"休1",label:"休日南北ルート 1便",route:"休日南北ルート",dep:"読谷バスターミナル",arr:"読谷バスターミナル",dur:87,stops:[
+      ["読谷バスターミナル","11:20"],["瀬名波入口","11:21"],["宇座公民館前","11:22"],["高志保","11:23"],["高志保入口","11:24"],["旧役場前","11:25"],["イオンタウン読谷座喜味","11:28"],["福祉センター","11:30"],["読谷村役場","11:31"],["健康増進センター","11:33"],["JAゆんた市場","11:36"],["伊良皆（県道6号線）","11:45"],["大木中道","11:46"],["県営比謝団地南","11:47"],["サンエー大湾シティ","11:52"],["比謝公民館前","11:54"],["大湾公民館前","11:56"],["古堅皆呉原","11:58"],["イオンタウン読谷","12:01"],["イオンタウン読谷","12:12"],["古堅南小学校","12:13"],["大湾西原","12:16"],["大木南","12:17"],["伊良皆（県道6号線）","12:20"],["伊良皆（国道58号）","12:22"],["JAゆんた市場","12:30"],["読谷村役場","12:33"],["健康増進センター","12:34"],["福祉センター","12:37"],["イオンタウン読谷座喜味","12:40"],["旧役場前","12:42"],["高志保入口","12:43"],["高志保","12:44"],["宇座公民館前","12:45"],["瀬名波入口","12:46"],["読谷バスターミナル","12:47"]]},
+    {id:"休2",label:"休日南北ルート 2便",route:"休日南北ルート",dep:"読谷バスターミナル",arr:"読谷バスターミナル",dur:87,stops:[
+      ["読谷バスターミナル","13:20"],["瀬名波入口","13:21"],["宇座公民館前","13:22"],["高志保","13:23"],["高志保入口","13:24"],["旧役場前","13:25"],["イオンタウン読谷座喜味","13:28"],["福祉センター","13:30"],["読谷村役場","13:31"],["健康増進センター","13:33"],["JAゆんた市場","13:36"],["伊良皆（県道6号線）","13:45"],["大木中道","13:46"],["県営比謝団地南","13:47"],["サンエー大湾シティ","13:52"],["比謝公民館前","13:54"],["大湾公民館前","13:56"],["古堅皆呉原","13:58"],["イオンタウン読谷","14:01"],["イオンタウン読谷","14:12"],["古堅南小学校","14:13"],["大湾西原","14:16"],["大木南","14:17"],["伊良皆（県道6号線）","14:20"],["伊良皆（国道58号）","14:22"],["JAゆんた市場","14:30"],["読谷村役場","14:33"],["健康増進センター","14:34"],["福祉センター","14:37"],["イオンタウン読谷座喜味","14:40"],["旧役場前","14:42"],["高志保入口","14:43"],["高志保","14:44"],["宇座公民館前","14:45"],["瀬名波入口","14:46"],["読谷バスターミナル","14:47"]]},
+    {id:"休3",label:"休日南北ルート 3便",route:"休日南北ルート",dep:"読谷バスターミナル",arr:"読谷バスターミナル",dur:87,stops:[
+      ["読谷バスターミナル","15:20"],["瀬名波入口","15:21"],["宇座公民館前","15:22"],["高志保","15:23"],["高志保入口","15:24"],["旧役場前","15:25"],["イオンタウン読谷座喜味","15:28"],["福祉センター","15:30"],["読谷村役場","15:31"],["健康増進センター","15:33"],["JAゆんた市場","15:36"],["伊良皆（県道6号線）","15:45"],["大木中道","15:46"],["県営比謝団地南","15:47"],["サンエー大湾シティ","15:52"],["比謝公民館前","15:54"],["大湾公民館前","15:56"],["古堅皆呉原","15:58"],["イオンタウン読谷","16:01"],["イオンタウン読谷","16:12"],["古堅南小学校","16:13"],["大湾西原","16:16"],["大木南","16:17"],["伊良皆（県道6号線）","16:20"],["伊良皆（国道58号）","16:22"],["JAゆんた市場","16:30"],["読谷村役場","16:33"],["健康増進センター","16:34"],["福祉センター","16:37"],["イオンタウン読谷座喜味","16:40"],["旧役場前","16:42"],["高志保入口","16:43"],["高志保","16:44"],["宇座公民館前","16:45"],["瀬名波入口","16:46"],["読谷バスターミナル","16:47"]]},
+    {id:"休4",label:"休日南北ルート 4便",route:"休日南北ルート",dep:"読谷バスターミナル",arr:"読谷バスターミナル",dur:87,stops:[
+      ["読谷バスターミナル","17:20"],["瀬名波入口","17:21"],["宇座公民館前","17:22"],["高志保","17:23"],["高志保入口","17:24"],["旧役場前","17:25"],["イオンタウン読谷座喜味","17:28"],["福祉センター","17:30"],["読谷村役場","17:31"],["健康増進センター","17:33"],["JAゆんた市場","17:36"],["伊良皆（県道6号線）","17:45"],["大木中道","17:46"],["県営比謝団地南","17:47"],["サンエー大湾シティ","17:52"],["比謝公民館前","17:54"],["大湾公民館前","17:56"],["古堅皆呉原","17:58"],["イオンタウン読谷","18:01"],["イオンタウン読谷","18:12"],["古堅南小学校","18:13"],["大湾西原","18:16"],["大木南","18:17"],["伊良皆（県道6号線）","18:20"],["伊良皆（国道58号）","18:22"],["JAゆんた市場","18:30"],["読谷村役場","18:33"],["健康増進センター","18:34"],["福祉センター","18:37"],["イオンタウン読谷座喜味","18:40"],["旧役場前","18:42"],["高志保入口","18:43"],["高志保","18:44"],["宇座公民館前","18:45"],["瀬名波入口","18:46"],["読谷バスターミナル","18:47"]]},
+  ]
+};
+
+/* ── 停留所マスター（全ルートから収集、代表座標付き） ── */
+const STOP_COORDS = {
+  "読谷バスターミナル": [26.419343525880638, 127.73262126374665],
+  "瀬名波入口": [26.417065870239227, 127.73240127802708],
+  "長浜吹出原": [26.414740263076798, 127.7360531001014],
+  "長浜公民館西": [26.42183884557203, 127.73816564197887],
+  "船地原": [26.42260308158572, 127.73488427842582],
+  "川平": [26.424500123613104, 127.73081109004909],
+  "瀬名波": [26.42138045988755, 127.7299038250933],
+  "渡慶次小学校": [26.419582671944077, 127.72756537148773],
+  "渡慶次公民館": [26.421315072014355, 127.72633068292731],
+  "宇座": [26.42640703880693, 127.72093991296988],
+  "儀間": [26.41926958480555, 127.72316460177109],
+  "渡慶次寺原": [26.41774326114127, 127.72720927782703],
+  "儀間公民館前": [26.416123870885468, 127.72949800693422],
+  "高志保": [26.41094217577445, 127.73228347119519],
+  "高志保入口": [26.408578437488817, 127.73231892866588],
+  "波平": [26.40560567036533, 127.73020942951788],
+  "波平仲石良原": [26.404681271044698, 127.7256431001006],
+  "大当": [26.39899247060362, 127.72461273554137],
+  "読谷診療所前": [26.395147084219985, 127.72569627791908],
+  "都屋": [26.39340186391314, 127.72696719316139],
+  "楚辺中道": [26.38760009033405, 127.72894500683306],
+  "都屋中道": [26.38962625621436, 127.7258006417765],
+  "読谷中学校前": [26.39673510113947, 127.74197779388933],
+  "読谷村役場": [26.396339276565627, 127.74368526152894],
+  "健康増進センター": [26.395595866313034, 127.74578000807047],
+  "JAゆんた市場": [26.39309827647105, 127.74591622997193],
+  "宇座公民館前": [26.4127740596462, 127.73239785584144],
+  "旧役場前": [26.407241222511853, 127.73378864128787],
+  "イオンタウン読谷座喜味": [26.40370803283835, 127.73580329165905],
+  "福祉センター": [26.398683561954318, 127.74221594588724],
+  "楚辺": [26.3882012568637, 127.73044637068614],
+  "大添": [26.386283943608497, 127.73457846448802],
+  "赤犬子宮前": [26.385137533710633, 127.73966302710012],
+  "古堅小学校入口": [26.38323606597386, 127.74243718406494],
+  "古堅皆呉原": [26.366980720580028, 127.7454285492107],
+  "渡具知": [26.36630852732811, 127.7423826426826],
+  "渡具知公民館前": [26.36531891477665, 127.74009119366721],
+  "渡具知後原": [26.370807266826194, 127.7375020995909],
+  "イオンタウン読谷": [26.368074624582984, 127.74474873710115],
+  "古堅南小学校": [26.37059249189438, 127.7494087355431],
+  "大湾西原": [26.37553751823219, 127.74711873604923],
+  "大木南": [26.38080848405479, 127.74687346444969],
+  "伊良皆（県道6号線）": [26.38270442609918, 127.75383427673029],
+  "伊良皆（国道58号）": [26.38449948182373, 127.75495827772949],
+  "喜名公民館前": [26.399125066536484, 127.75690616614686],
+  "親志入口": [26.405163684811903, 127.75902282931874],
+  "シーレイク座喜味": [26.411140485345683, 127.75214363368092],
+  "横田公園": [26.403908077101597, 127.75704154901761],
+  "親志公民館西": [26.403041491974182, 127.75417737158772],
+  "座喜味入口": [26.40385207705677, 127.75150491347127],
+  "座喜味": [26.402711506985014, 127.74383245343122],
+  "喜名": [26.40030480162625, 127.75849952429743],
+  "大木中道": [26.381123095465817, 127.74995610020575],
+  "県営比謝団地南": [26.37776487495462, 127.7527036419819],
+  "サンエー大湾シティ": [26.376098057332015, 127.75628203875394],
+  "比謝公民館前": [26.374105907725177, 127.75434464247023],
+  "大湾公民館前": [26.372017909639798, 127.75413227802734],
+  "イオンタウン読谷古堅": [26.368074624582984, 127.74474873710115],
+};
+
+/* ── ユーティリティ ── */
+function hav(la1,lo1,la2,lo2){
+  const R=6371000,d2r=Math.PI/180;
+  const dLa=(la2-la1)*d2r,dLo=(lo2-lo1)*d2r;
+  const a=Math.sin(dLa/2)**2+Math.cos(la1*d2r)*Math.cos(la2*d2r)*Math.sin(dLo/2)**2;
+  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
+function t2m(t){const[h,m]=t.split(":").map(Number);return h*60+m;}
+function nowM(){const n=new Date();return n.getHours()*60+n.getMinutes();}
+function fmtD(m){return m<1000?{n:Math.round(m),u:"m"}:{n:(m/1000).toFixed(1),u:"km"};}
+function autoDay(){const d=new Date().getDay();return(d===0||d===6)?"holiday":"weekday";}
+
+/* ── 状態 ── */
+let dayType = autoDay();
+let selStop = null;
+let userLat = 26.3954, userLng = 127.7437;
+let openCards = new Set();
+
+/* ── 停留所一覧の構築 ── */
+function buildStopList(dt){
+  const map = new Map();
+  for(const r of ROUTES[dt]){
+    for(const [sn] of r.stops){
+      if(!map.has(sn)){
+        const coord = STOP_COORDS[sn] || [26.3954,127.7437];
+        map.set(sn,{name:sn,routes:new Set(),lat:coord[0],lng:coord[1]});
+      }
+      map.get(sn).routes.add(r.route);
+    }
+  }
+  return [...map.values()];
+}
+
+/* ── 停留所リスト描画 ── */
+function refreshGPS(){
+  if(!navigator.geolocation){
+    alert("このブラウザは位置情報に対応していません");
+    return;
+  }
+  const btn = document.getElementById("gps-btn");
+  const icon = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/></svg>`;
+  if(btn){ btn.disabled=true; btn.textContent="取得中…"; }
+
+  navigator.geolocation.getCurrentPosition(
+    pos=>{
+      userLat = pos.coords.latitude;
+      userLng = pos.coords.longitude;
+      if(btn){ btn.disabled=false; btn.innerHTML=icon+" 現在地から近いバス停を探す"; }
+      document.getElementById("stop-search").value = "";
+      renderStops();
+    },
+    ()=>{
+      if(btn){ btn.disabled=false; btn.innerHTML=icon+" 現在地から近いバス停を探す"; }
+      alert("位置情報を取得できませんでした。\nブラウザの位置情報の許可をご確認ください。");
+    },
+    { enableHighAccuracy:true, timeout:8000, maximumAge:60000 }
+  );
+}
+
+/* ── 最近使ったバス停（localStorage） ── */
+const RECENT_KEY = "otori_bus_recent";
+function getRecent(){
+  try { return JSON.parse(localStorage.getItem(RECENT_KEY) || "[]"); }
+  catch(e){ return []; }
+}
+function addRecent(name){
+  let list = getRecent().filter(n=>n!==name);
+  list.unshift(name);
+  list = list.slice(0, 3);
+  try { localStorage.setItem(RECENT_KEY, JSON.stringify(list)); } catch(e){}
+  renderRecent();
+}
+
+/* ── 最近使ったバス停エリア描画 ── */
+function renderRecent(){
+  const area = document.getElementById("recent-area");
+  if(!area) return;
+  const q    = document.getElementById("stop-search").value.trim();
+  const list = getRecent();
+  if(list.length === 0 || q){ area.innerHTML = ""; return; }
+
+  const now = nowM();
+  const items = list.map(name=>{
+    const routes = ROUTES[dayType].filter(r=>r.stops.some(([n])=>n===name));
+    const routeStr = [...new Set(routes.map(r=>r.route))].join("・");
+    let nextMins = null;
+    for(const r of routes){
+      const st = r.stops.find(([n])=>n===name);
+      if(st){ const diff=t2m(st[1])-now; if(diff>=0&&(nextMins===null||diff<nextMins)) nextMins=diff; }
+    }
+    if(!routeStr) return "";  // 今日の運行なし
+    const badge = nextMins===null
+      ? `<span class="stop-next-badge badge-done">本日終了</span>`
+      : nextMins<=10
+        ? `<span class="stop-next-badge badge-soon">あと${nextMins}分</span>`
+        : `<span class="stop-next-badge badge-ok">あと${nextMins}分</span>`;
+    const active = name===selStop ? " active" : "";
+    return `<div class="recent-item${active}" onclick="selectStop('${name.replace(/'/g,"\'")}')">
+      <span class="recent-icon">🕐</span>
+      <div style="flex:1;min-width:0">
+        <div class="recent-name">${name}</div>
+        <div class="recent-route">${routeStr}</div>
+      </div>
+      ${badge}
+    </div>`;
+  }).filter(Boolean).join("");
+
+  area.innerHTML = items
+    ? `<div class="recent-label">最近使ったバス停</div>${items}`
+    : "";
+}
+
+/* ── バス停検索リスト描画 ── */
+function renderStops(){
+  const q = document.getElementById("stop-search").value.trim();
+  const container = document.getElementById("stop-list");
+
+  renderRecent();
+
+  // 全停留所を収集
+  const seen = new Set();
+  const all  = [];
+  for(const r of ROUTES[dayType]){
+    for(const [sn] of r.stops){
+      if(!seen.has(sn)){ seen.add(sn); all.push(sn); }
+    }
+  }
+
+  const now = nowM();
+
+  // ── GPS取得済みかつ検索欄が空 → 近い順5件表示 ──
+  if(q.length < 1 && userLat !== null){
+    const withDist = all.map(name=>({
+      name,
+      dist: hav(userLat, userLng,
+        STOP_COORDS[name] ? STOP_COORDS[name][0] : 26.3954,
+        STOP_COORDS[name] ? STOP_COORDS[name][1] : 127.7437)
+    })).sort((a,b)=>a.dist-b.dist).slice(0, 5);
+
+    container.innerHTML = withDist.map(({name, dist})=>{
+      const routes = ROUTES[dayType].filter(r=>r.stops.some(([n])=>n===name));
+      const routeStr = [...new Set(routes.map(r=>r.route))].join("・");
+      let nextMins = null;
+      for(const r of routes){
+        const st = r.stops.find(([n])=>n===name);
+        if(st){ const diff=t2m(st[1])-now; if(diff>=0&&(nextMins===null||diff<nextMins)) nextMins=diff; }
+      }
+      const badge = nextMins===null
+        ? `<span class="stop-next-badge badge-done">本日終了</span>`
+        : nextMins<=10
+          ? `<span class="stop-next-badge badge-soon">あと${nextMins}分</span>`
+          : `<span class="stop-next-badge badge-ok">あと${nextMins}分</span>`;
+      const d = fmtD(dist);
+      const active = name===selStop ? " active" : "";
+      return `<div class="stop-item${active}" onclick="selectStop('${name.replace(/'/g,"\'")}')">
+        <div class="stop-dist"><div class="dist-n">${d.n}</div><div class="dist-u">${d.u}</div></div>
+        <div class="stop-name-wrap"><div class="stop-name-text">${name}</div><div class="stop-route-text">${routeStr}</div></div>
+        ${badge}
+      </div>`;
+    }).join("");
+    return;
+  }
+
+  // ── 未入力かつGPS未取得 → 検索を促す ──
+  if(q.length < 1){
+    container.innerHTML = `<div class="search-prompt">
+      <div class="search-prompt-icon">🔍</div>
+      バス停名を入力して検索するか、<br>
+      現在地ボタンで近くのバス停を探せます<br>
+      <strong>例）読谷、JAゆんた、高志保</strong>
+    </div>`;
+    return;
+  }
+
+  // ── テキスト検索：最大8件 ──
+  const matched = all.filter(n=>n.includes(q)).slice(0, 8);
+
+  if(matched.length === 0){
+    container.innerHTML = `<div class="search-prompt">
+      <div class="search-prompt-icon">🚏</div>
+      「${q}」に一致するバス停が見つかりませんでした
+    </div>`;
+    return;
+  }
+
+  container.innerHTML = matched.map(name=>{
+    const routes = ROUTES[dayType].filter(r=>r.stops.some(([n])=>n===name));
+    const routeStr = [...new Set(routes.map(r=>r.route))].join("・");
+    let nextMins = null;
+    for(const r of routes){
+      const st = r.stops.find(([n])=>n===name);
+      if(st){ const diff=t2m(st[1])-now; if(diff>=0&&(nextMins===null||diff<nextMins)) nextMins=diff; }
+    }
+    const badge = nextMins===null
+      ? `<span class="stop-next-badge badge-done">本日終了</span>`
+      : nextMins<=10
+        ? `<span class="stop-next-badge badge-soon">あと${nextMins}分</span>`
+        : `<span class="stop-next-badge badge-ok">あと${nextMins}分</span>`;
+    const active = name===selStop ? " active" : "";
+    return `<div class="stop-item${active}" onclick="selectStop('${name.replace(/'/g,"\'")}')">
+      <div class="stop-name-wrap"><div class="stop-name-text">${name}</div><div class="stop-route-text">${routeStr}</div></div>
+      ${badge}
+    </div>`;
+  }).join("");
+}
+
+
+/* ── バス停選択 → 便カード描画 ── */
+function selectStop(name){
+  selStop = name;
+  openCards.clear(); openMaps.clear();
+  addRecent(name);
+  document.getElementById("stop-search").value = "";
+  renderStops();
+  renderCards();
+  // カードエリアへスクロール
+  setTimeout(()=>{
+    const el = document.getElementById("cards-area");
+    if(el) el.scrollIntoView({behavior:"smooth", block:"start"});
+  }, 100);
+}
+
+function renderCards(){
+  const area = document.getElementById("cards-area");
+  if(!selStop){
+    area.innerHTML=`<div class="empty-state"><div class="empty-icon">🚏</div>上のリストからバス停を選んでください</div>`;
+    return;
+  }
+  const now = nowM();
+  const routes = ROUTES[dayType].filter(r=>r.stops.some(([n])=>n===selStop));
+
+  if(!routes.length){
+    area.innerHTML=`<div class="empty-state"><div class="empty-icon">🕐</div>本日この停留所の運行はありません</div>`;
+    return;
+  }
+
+  const withTime = routes.map(r=>{
+    const st = r.stops.find(([n])=>n===selStop);
+    return {r, time:st?st[1]:null};
+  }).filter(x=>x.time).sort((a,b)=>t2m(a.time)-t2m(b.time));
+
+  // 経由地サマリ
+  function getVia(r, stopName){
+    const idx = r.stops.findIndex(([n])=>n===stopName);
+    if(idx<0)return "";
+    const before = idx>0?r.stops[idx-1][0]:"";
+    const after  = idx<r.stops.length-1?r.stops[idx+1][0]:"";
+    return [before&&`← ${before}`,after&&`→ ${after}`].filter(Boolean).join("　");
+  }
+
+  const futureTimes = withTime.filter(x=>t2m(x.time)>=now);
+  const pastTimes   = withTime.filter(x=>t2m(x.time)<now);
+  const showPast    = showPastCards.has(selStop);
+
+  // 直前1件は常に表示、残りは展開時のみ
+  const lastPast    = pastTimes.length > 0 ? [pastTimes[pastTimes.length - 1]] : [];
+  const olderPast   = pastTimes.length > 1 ? pastTimes.slice(0, pastTimes.length - 1) : [];
+  const displayTimes = showPast
+    ? withTime
+    : [...lastPast, ...futureTimes];
+    // 展開前: 直前1件のみ + 未来便
+    // 展開後: 全便
+
+  const hiddenPastCount = olderPast.length; // 折りたたまれている件数
+
+  let html = `<div class="cards-header">
+    <span class="cards-stop-name">${selStop}</span>
+    <span class="cards-route-pill">全${withTime.length}便</span>
+  </div>`;
+
+  // ── 案内文 ──
+  html += `<div class="timetable-notice">
+    <span class="notice-icon">ℹ️</span>
+    交通状況により、実際の時刻と異なる場合があります。
+  </div>`;
+
+  // ── 通過済みバー（上部：古い便の展開ボタン） ──
+  if(hiddenPastCount > 0 && !showPast){
+    html += `<div class="past-toggle-row" onclick="togglePast('${selStop.replace(/'/g,"\'")}')">
+      <span>▲ さらに古い便を表示</span>
+      <span class="past-count-badge">${hiddenPastCount}便</span>
+    </div>`;
+  }
+
+  // ── 便カード一覧 ──
+  html += `<div class="card-list fade-up">`;
+
+  for(const {r,time} of displayTimes){
+    const tm   = t2m(time);
+    const diff = tm - now;
+    const isNextBus = (withTime.find(x=>t2m(x.time)>=now)?.r.id === r.id);
+    let cls="", waitHtml="";
+    if(diff<0){cls="is-past";waitHtml=`<span class="card-wait wait-later">通過済</span>`;}
+    else if(diff===0||diff<=2){cls="is-next";waitHtml=`<span class="card-wait wait-next">まもなく</span>`;}
+    else if(diff<=10){cls="is-soon";waitHtml=`<span class="card-wait wait-soon">あと${diff}分</span>`;}
+    else if(isNextBus){cls="is-next";waitHtml=`<span class="card-wait wait-next">次のバス あと${diff}分</span>`;}
+    else{waitHtml=`<span class="card-wait wait-later" style="font-size:9px">${diff}分後</span>`;}
+
+    const via = getVia(r, selStop);
+    const isOpen   = openCards.has(r.id);
+    const isMapOpen = openMaps.has(r.id);
+
+    // 全停留所リスト
+    const stopRows = r.stops.map(([sn,st])=>{
+      const isCur = sn===selStop;
+      const isDep = sn===r.dep;
+      const isArr = sn===r.arr;
+      let dot=`<div class="stop-dot${isDep?" dep":isArr?" arr":isCur?" cur":""}"></div>`;
+      let label="";
+      if(isDep&&isArr)label=`<span class="sr-label">発着</span>`;
+      else if(isDep)label=`<span class="sr-label">始発</span>`;
+      else if(isArr)label=`<span class="sr-label arr-label">終着</span>`;
+      return `<div class="stop-row${isCur?" current-stop":""}">${dot}<span class="sr-time">${st}</span><span class="sr-name">${sn}</span>${label}</div>`;
+    }).join("");
+
+    // ミニマップSVG
+    const mapSvg = buildMiniMap(r, selStop);
+
+    html+=`<div class="bus-card ${cls}">
+      <div class="card-head">
+        <div class="card-badge-wrap">
+          <span class="card-time">${time}</span>
+          ${waitHtml}
+        </div>
+        <div class="card-info">
+          <div class="card-service-id">${r.label}</div>
+          <div class="card-route-line">${r.dep} → ${r.arr}　所要${r.dur}分</div>
+          ${via?`<div class="card-route-line" style="margin-top:1px;font-size:11px;color:#888">${via}</div>`:""}
+        </div>
+        <button class="card-toggle-btn${isOpen?" open":""}" onclick="toggleCard('${r.id}')" aria-label="経路を${isOpen?"閉じる":"開く"}">${isOpen?"▲":"▼"}</button>
+      </div>
+      <div class="card-stops${isOpen?" open":""}" id="stops-${r.id}">${stopRows}</div>
+      ${isMapOpen
+        ? `<div class="route-map-wrap">
+            <div class="route-map-label">ルートマップ</div>
+            <div class="route-map-scroll">${mapSvg}</div>
+            <button class="map-toggle-btn" onclick="toggleMap('${r.id}')">▲ マップを閉じる</button>
+           </div>`
+        : `<div style="padding:6px 14px 10px">
+            <button class="map-toggle-btn" onclick="toggleMap('${r.id}')">🗺 ルートマップを表示</button>
+           </div>`}
+    </div>`;
+  }
+
+  html += `</div>`; // card-list 終了
+
+  // ── 通過済みバー（下部：展開中のとき折りたたむボタン） ──
+  if(pastTimes.length > 0 && showPast){
+    html += `<div class="past-toggle-row" onclick="togglePast('${selStop.replace(/'/g,"\'")}')">
+      <span>▲ 古い便を折りたたむ</span>
+      <span class="past-count-badge">${pastTimes.length}便</span>
+    </div>`;
+  }
+
+  area.innerHTML = html;
+}
+
+const showPastCards = new Set();
+function togglePast(stop){
+  if(showPastCards.has(stop)) showPastCards.delete(stop);
+  else showPastCards.add(stop);
+  renderCards();
+}
+
+const openMaps = new Set();
+function toggleMap(id){
+  if(openMaps.has(id)) openMaps.delete(id);
+  else openMaps.add(id);
+  renderCards();
+}
+
+function toggleCard(id){
+  if(openCards.has(id))openCards.delete(id);
+  else openCards.add(id);
+  renderCards();
+}
+
+
+/* ── ミニマップ生成 ── */
+function buildMiniMap(route, currentStop){
+  const stops = route.stops;
+  const n = stops.length;
+  if(n === 0) return "";
+
+  const PINK   = "#e8528a";
+  const BLUE   = "#2a6cb5";
+  const GRAY   = "#ddd";
+  const DOT_R  = 5;
+  const CUR_R  = 7;
+  const PAD    = 16;
+  const ROW_H  = 38;   // 1停留所あたりの縦幅
+  const SVG_W  = 300;
+  const LINE_X = 36;   // ライン中心X
+  const TEXT_X = 50;   // テキスト開始X
+
+  const svgH = PAD * 2 + (n - 1) * ROW_H;
+
+  let svg = `<svg class="route-map-svg" width="${SVG_W}" height="${svgH}" viewBox="0 0 ${SVG_W} ${svgH}" xmlns="http://www.w3.org/2000/svg">`;
+
+  // 縦ライン
+  svg += `<line x1="${LINE_X}" y1="${PAD}" x2="${LINE_X}" y2="${PAD + (n-1)*ROW_H}" stroke="${GRAY}" stroke-width="2"/>`;
+
+  stops.forEach(([sn, st], i) => {
+    const y   = PAD + i * ROW_H;
+    const isDep  = sn === route.dep;
+    const isArr  = sn === route.arr;
+    const isCur  = sn === currentStop;
+    const dotR   = isCur ? CUR_R : DOT_R;
+    const dotCol = isCur ? PINK : (isDep || isArr) ? BLUE : GRAY;
+    const txtCol = isCur ? PINK : (isDep || isArr) ? BLUE : "#555";
+    const fwt    = (isCur || isDep || isArr) ? "600" : "400";
+
+    // 丸
+    svg += `<circle cx="${LINE_X}" cy="${y}" r="${dotR}" fill="${dotCol}"/>`;
+
+    // 現在地マーカー（外輪）
+    if(isCur){
+      svg += `<circle cx="${LINE_X}" cy="${y}" r="${CUR_R+3}" fill="none" stroke="${PINK}" stroke-width="1.5" stroke-dasharray="3,2"/>`;
+    }
+
+    // ラベル
+    const label = (isDep && isArr) ? `${sn} (発着)` : isDep ? `${sn} ▶` : isArr ? `${sn} ◀` : sn;
+    const dispName = label.length > 14 ? label.slice(0,13)+"…" : label;
+    svg += `<text x="${TEXT_X}" y="${y+1}" dominant-baseline="middle" font-family="'Noto Sans JP',sans-serif" font-size="11" fill="${txtCol}" font-weight="${fwt}">${dispName}</text>`;
+
+    // 時刻
+    svg += `<text x="${SVG_W - PAD}" y="${y+1}" dominant-baseline="middle" text-anchor="end" font-family="'DM Mono',monospace" font-size="11" fill="${txtCol}" font-weight="${fwt}">${st}</text>`;
+  });
+
+  svg += `</svg>`;
+  return svg;
+}
+
+
+/* ── サイドメニュー ── */
+const ROUTE_COLORS = {
+  "北ルート":     "#2a6cb5",
+  "西ルート":     "#e8528a",
+  "南ルート":     "#2d8f54",
+  "休日南北ルート":"#e8a020",
+};
+
+// 路線ごとの全停留所（順序維持・重複なし）
+function getRouteStops(dayType){
+  const routeMap = new Map();
+  for(const r of ROUTES[dayType]){
+    if(!routeMap.has(r.route)) routeMap.set(r.route, new Map());
+    const stopMap = routeMap.get(r.route);
+    for(const [sn] of r.stops){
+      if(!stopMap.has(sn)) stopMap.set(sn, true);
+    }
+  }
+  return routeMap;
+}
+
+let openRoutes = new Set();
+
+function buildMenu(){
+  const body = document.getElementById("menu-body");
+  if(!body) return;
+  const now = nowM();
+  const routeMap = getRouteStops(dayType);
+
+  body.innerHTML = [...routeMap.entries()].map(([routeName, stopMap])=>{
+    const color = ROUTE_COLORS[routeName] || "#888";
+    const stops = [...stopMap.keys()];
+    const isOpen = openRoutes.has(routeName);
+
+    const stopItems = stops.map(sn=>{
+      const routes = ROUTES[dayType].filter(r=>r.stops.some(([n])=>n===sn));
+      let nextMins = null;
+      for(const r of routes){
+        if(r.route !== routeName) continue;
+        const st = r.stops.find(([n])=>n===sn);
+        if(st){ const diff=t2m(st[1])-now; if(diff>=0&&(nextMins===null||diff<nextMins)) nextMins=diff; }
+      }
+      const badgeCls = nextMins===null ? "sub-badge-done" : nextMins<=10 ? "sub-badge-soon" : "sub-badge-ok";
+      const badgeTxt = nextMins===null ? "終了" : `${nextMins}分`;
+      const active = sn===selStop ? " active" : "";
+      return `<div class="stop-sub-item${active}" onclick="selectFromMenu('${sn.replace(/'/g,"\'")}')">
+        <span>${sn}</span>
+        <span class="stop-sub-next ${badgeCls}">${badgeTxt}</span>
+      </div>`;
+    }).join("");
+
+    return `<div class="route-group">
+      <button class="route-group-btn${isOpen?" open":""}" onclick="toggleRouteGroup('${routeName}')">
+        <div class="route-group-name">
+          <div class="route-dot" style="background:${color}"></div>
+          ${routeName}
+          <span class="route-count">${stops.length}停留所</span>
+        </div>
+        <span class="route-chevron">▼</span>
+      </button>
+      <div class="stop-sub-list${isOpen?" open":""}">${stopItems}</div>
+    </div>`;
+  }).join("");
+}
+
+function toggleRouteGroup(name){
+  if(openRoutes.has(name)) openRoutes.delete(name);
+  else openRoutes.add(name);
+  buildMenu();
+}
+
+function openMenu(){
+  buildMenu();
+  document.getElementById("side-menu").classList.add("open");
+  document.getElementById("menu-overlay").classList.add("open");
+  document.body.style.overflow = "hidden";
+}
+function closeMenu(){
+  document.getElementById("side-menu").classList.remove("open");
+  document.getElementById("menu-overlay").classList.remove("open");
+  document.body.style.overflow = "";
+}
+function selectFromMenu(name){
+  closeMenu();
+  selectStop(name);
+}
+
+/* ── 時計 ── */
+function updateClock(){
+  const n=new Date();
+  const h=String(n.getHours()).padStart(2,"0"), m=String(n.getMinutes()).padStart(2,"0");
+  document.getElementById("clock").textContent=`${h}:${m}`;
+  const days=["日","月","火","水","木","金","土"];
+  document.getElementById("clock-date").textContent=`${n.getMonth()+1}月${n.getDate()}日（${days[n.getDay()]}）`;
+  renderStops();
+  if(selStop)renderCards();
+}
+
+/* ── 曜日切替 ── */
+function setDay(dt){
+  dayType=dt;
+  document.getElementById("btn-weekday").classList.toggle("active",dt==="weekday");
+  document.getElementById("btn-holiday").classList.toggle("active",dt==="holiday");
+  selStop=null; openCards.clear(); openMaps.clear(); showPastCards.clear(); openRoutes.clear();
+  renderStops(); renderCards();
+}
+
+/* GPS機能なし版 */
+
+/* ── 初期化 ── */
+const dt = autoDay();
+dayType = dt;
+document.getElementById("btn-weekday").classList.toggle("active",dt==="weekday");
+document.getElementById("btn-holiday").classList.toggle("active",dt==="holiday");
+updateClock();
+setInterval(updateClock, 30000);
+renderStops();
+renderRecent();
+renderCards();
+</script>
+</body>
+</html>

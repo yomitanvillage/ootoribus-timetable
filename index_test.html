@@ -1103,6 +1103,50 @@ body.tab-plan .day-bar, body.tab-guide .day-bar { display: none; }
 @media (prefers-reduced-motion: reduce) {
   .pk-btn:active, .pk-pill:active, .sp-big-btn:active { transform: none; }
 }
+
+/* ═══ 線のアイコン（絵文字の置きかえ） ═══ */
+.ic { width: 1.15em; height: 1.15em; vertical-align: -0.2em; flex-shrink: 0;
+  fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.menu-close-btn .ic, .lm-close .ic { width: 22px; height: 22px; }
+.empty-icon .ic, .search-prompt-icon .ic { width: 40px; height: 40px; color: var(--ink-faint); stroke-width: 2; }
+.approach-bus .ic { width: 17px; height: 17px; color: #fff; }
+.notice-bar .ic, .lm-note .ic { color: #b07a00; }
+.fare-chevron .ic, .route-chevron .ic, .map-trip-chevron .ic { width: 20px; height: 20px; vertical-align: middle; }
+
+/* ═══ サイドバー（バス停から選ぶ・料金案内・路線マップ）の見やすさ ═══ */
+.side-menu { width: 320px; max-width: 88vw; left: -340px; }
+.side-menu.open { left: 0; }
+.menu-header { padding: 12px 12px 12px 16px; min-height: 64px; }
+.menu-header-title { font-size: 18px; font-weight: 800; gap: 10px; }
+.menu-header-title .ic { width: 24px; height: 24px; }
+.menu-close-btn { width: 44px; height: 44px; flex-shrink: 0; }
+.menu-guide { padding: 12px 16px 4px; font-size: 15px; color: var(--ink-mid); line-height: 1.6; }
+.route-group-btn { min-height: 60px; padding: 12px 16px; }
+.route-group-name { font-size: 17px; font-weight: 800; gap: 10px; }
+.route-dot { width: 14px; height: 14px; }
+.route-count { font-size: 13px; font-weight: 700; padding: 3px 8px; color: var(--ink-mid); }
+.route-chevron, .map-trip-chevron { color: var(--ink-mid); }
+.stop-sub-item {
+  width: 100%; min-height: 52px; padding: 10px 16px 10px 40px;
+  border: none; border-bottom: 1px solid var(--border); background: none;
+  font-family: inherit; font-size: 16px; font-weight: 700; color: var(--ink); text-align: left;
+}
+.stop-sub-next { font-size: 14px; padding: 3px 10px; border-radius: 12px; }
+.sub-badge-soon { background: var(--amber-pale); color: #6b4c00; border: 1px solid #f0dfa6; }
+.sub-badge-done { color: var(--ink-mid); }
+.map-trip-btn { min-height: 52px; padding: 10px 16px 10px 40px; font-size: 16px; font-weight: 700; color: var(--ink); border-bottom: 1px solid var(--border); }
+.route-map-label { font-size: 15px; }
+.fare-section { padding: 6px 16px 16px; border-top: 2px solid var(--border); }
+.fare-toggle-btn { min-height: 56px; }
+.fare-section-title { font-size: 17px; font-weight: 800; gap: 10px; }
+.fare-section-title .ic { width: 24px; height: 24px; color: var(--pink-deep); }
+.fare-block-label { font-size: 14px; letter-spacing: 0; text-transform: none; color: var(--ink-mid); }
+.fare-row { font-size: 15px; padding: 9px 0; align-items: center; }
+.fare-who { color: var(--ink); line-height: 1.5; }
+.fare-price { font-family: inherit; font-size: 19px; font-weight: 800; color: var(--pink-deep); font-variant-numeric: tabular-nums; }
+.fare-free { font-size: 14px; padding: 3px 10px; border-radius: 12px; }
+.fare-ticket-name { font-size: 16px; font-weight: 800; display: flex; align-items: center; gap: 6px; }
+.fare-note { font-size: 15px; color: var(--ink-mid); display: flex; align-items: center; gap: 6px; }
 </style>
 </head>
 <body>
@@ -1113,15 +1157,15 @@ body.tab-plan .day-bar, body.tab-guide .day-bar { display: none; }
 <div class="side-menu" id="side-menu">
   <div class="menu-header">
     <div class="menu-header-title"><img src="data:image/png;base64,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" width="28" height="28" style="border-radius:50%" alt=""> バス停から選ぶ</div>
-    <button class="menu-close-btn" onclick="closeMenu()">✕</button>
+    <button class="menu-close-btn" onclick="closeMenu()" aria-label="閉じる"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
   </div>
   <div class="menu-body" id="menu-body"></div>
 
   <!-- 料金表 -->
   <div class="fare-section">
     <button class="fare-toggle-btn" onclick="toggleFare()" aria-expanded="false" id="fare-toggle">
-      <div class="fare-section-title">🎫 料金案内</div>
-      <span class="fare-chevron" id="fare-chevron">▼</span>
+      <div class="fare-section-title"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7.5A1.5 1.5 0 0 1 4.5 6h15A1.5 1.5 0 0 1 21 7.5V10a2 2 0 0 0 0 4v2.5a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 16.5V14a2 2 0 0 0 0-4z"/><path d="M15 6.5v2M15 11v2M15 15.5v2"/></svg>料金案内</div>
+      <span class="fare-chevron" id="fare-chevron"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span>
     </button>
     <div class="fare-body" id="fare-body">
 
@@ -1148,7 +1192,7 @@ body.tab-plan .day-bar, body.tab-guide .day-bar { display: none; }
     <div class="fare-block">
       <div class="fare-block-label">お得な乗車券</div>
       <div class="fare-ticket-card">
-        <div class="fare-ticket-name">🎟 1日フリー乗車券</div>
+        <div class="fare-ticket-name"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7.5A1.5 1.5 0 0 1 4.5 6h15A1.5 1.5 0 0 1 21 7.5V10a2 2 0 0 0 0 4v2.5a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 16.5V14a2 2 0 0 0 0-4z"/><path d="M15 6.5v2M15 11v2M15 15.5v2"/></svg>1日フリー乗車券</div>
         <div class="fare-row" style="padding:3px 0">
           <span class="fare-who">大人</span>
           <span class="fare-price">400円</span>
@@ -1161,7 +1205,7 @@ body.tab-plan .day-bar, body.tab-guide .day-bar { display: none; }
     </div>
 
     <div class="fare-note">
-      <span class="fare-note-icon">ℹ️</span>前払い制です。
+      <span class="fare-note-icon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.6v.1"/></svg></span>前払い制です。
     </div>
 
     </div><!-- /.fare-body -->
@@ -1206,8 +1250,8 @@ body.tab-plan .day-bar, body.tab-guide .day-bar { display: none; }
 <div class="menu-overlay" id="map-menu-overlay" onclick="closeMapMenu()"></div>
 <div class="map-menu" id="map-menu">
   <div class="menu-header">
-    <div class="menu-header-title">🗺 路線マップ</div>
-    <button class="menu-close-btn" onclick="closeMapMenu()">✕</button>
+    <div class="menu-header-title"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7l6-3 6 3 6-3v13l-6 3-6-3-6 3z"/><path d="M9 4v13M15 7v13"/></svg>路線マップ</div>
+    <button class="menu-close-btn" onclick="closeMapMenu()" aria-label="閉じる"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
   </div>
   <div class="menu-body" id="map-menu-body"></div>
 </div>
@@ -1230,8 +1274,8 @@ body.tab-plan .day-bar, body.tab-guide .day-bar { display: none; }
   <a class="news-banner" id="news-banner" href="https://www.vill.yomitan.okinawa.jp/soshiki/seikatsukankyo/gyomu/doro_kotsu/7100.html" target="_blank" rel="noopener" onclick="if(typeof gtag!=='undefined')gtag('event','news_banner_click',{'event_category':'お知らせ'})" style="display:none">
     <div class="news-banner-marquee">
       <div class="news-banner-track">
-        <span class="news-banner-text">📣 令和８年９月１日から運行ルート・時刻表が新しくなりました　タップで詳細・新時刻表を見る ›</span>
-        <span class="news-banner-text">📣 令和８年９月１日から運行ルート・時刻表が新しくなりました　タップで詳細・新時刻表を見る ›</span>
+        <span class="news-banner-text"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10v4a1 1 0 0 0 1 1h2l7 4V5L7 9H5a1 1 0 0 0-1 1z"/><path d="M17.5 9a4 4 0 0 1 0 6M8 15l1 5"/></svg> 令和８年９月１日から運行ルート・時刻表が新しくなりました　タップで詳細・新時刻表を見る ›</span>
+        <span class="news-banner-text"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10v4a1 1 0 0 0 1 1h2l7 4V5L7 9H5a1 1 0 0 0-1 1z"/><path d="M17.5 9a4 4 0 0 1 0 6M8 15l1 5"/></svg> 令和８年９月１日から運行ルート・時刻表が新しくなりました　タップで詳細・新時刻表を見る ›</span>
       </div>
     </div>
   </a>
@@ -1306,7 +1350,7 @@ body.tab-plan .day-bar, body.tab-guide .day-bar { display: none; }
   <div id="table-area" style="display:none"></div>
 
   <div class="notice-bar">
-    <span>⚠️</span>
+    <span><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M10.3 4.3L2.6 18a2 2 0 0 0 1.7 3h15.4a2 2 0 0 0 1.7-3L13.7 4.3a2 2 0 0 0-3.4 0z"/><path d="M12 9.5v4.5M12 17.4v.1"/></svg></span>
     <span>台風時は沖縄バスに準じ運休。年末年始（12/29〜1/3）・慰霊の日（6/23）は休日南北ルートのみ運行。</span>
   </div>
 
@@ -1351,7 +1395,7 @@ body.tab-plan .day-bar, body.tab-guide .day-bar { display: none; }
       </div>
     </div>
     <div class="lm-clock" id="lm-clock">--:--:--</div>
-    <button class="lm-close" onclick="closeLiveMap()" aria-label="閉じる">✕</button>
+    <button class="lm-close" onclick="closeLiveMap()" aria-label="閉じる"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
    </div>
   </div>
   <div class="day-bar">
@@ -1360,7 +1404,7 @@ body.tab-plan .day-bar, body.tab-guide .day-bar { display: none; }
       <button class="day-btn" id="lm-btn-holiday" onclick="setDay('holiday')">土日・祝日</button>
     </div>
   </div>
-  <div class="lm-note"><div class="lm-note-inner">⚠️ 時刻表に基づく推定位置です。遅延・迂回など実際の運行状況は反映されません。停留所間は直線で表示しています。</div></div>
+  <div class="lm-note"><div class="lm-note-inner"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M10.3 4.3L2.6 18a2 2 0 0 0 1.7 3h15.4a2 2 0 0 0 1.7-3L13.7 4.3a2 2 0 0 0-3.4 0z"/><path d="M12 9.5v4.5M12 17.4v.1"/></svg> 時刻表に基づく推定位置です。遅延・迂回など実際の運行状況は反映されません。停留所間は直線で表示しています。</div></div>
   <div class="lm-map-wrap">
     <svg id="lm-svg" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
       <g id="lm-viewport">
@@ -1377,7 +1421,7 @@ body.tab-plan .day-bar, body.tab-guide .day-bar { display: none; }
       <button onclick="lmZoom(1.4)" aria-label="拡大">＋</button>
       <button onclick="lmZoom(0.714)" aria-label="縮小">－</button>
       <button onclick="lmResetView()" aria-label="全体表示" style="font-size:13px">全体</button>
-      <button onclick="lmLocate()" aria-label="現在地" style="font-size:15px">📍</button>
+      <button onclick="lmLocate()" aria-label="現在地" style="font-size:18px"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2.5"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg></button>
     </div>
     <div class="lm-empty" id="lm-empty" style="display:none">
       <div class="lm-empty-card">
@@ -1592,6 +1636,10 @@ function refreshGPS(){
 }
 
 /* ── 最近使ったバス停（localStorage） ── */
+const ICON_STAR = '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l2.6 5.3 5.9.9-4.2 4.1 1 5.8L12 16.9l-5.3 2.7 1-5.8-4.2-4.1 5.9-.9z"/></svg>';
+const ICON_STAR_F = '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 3.5l2.6 5.3 5.9.9-4.2 4.1 1 5.8L12 16.9l-5.3 2.7 1-5.8-4.2-4.1 5.9-.9z"/></svg>';
+const ICON_UP = '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg>';
+const ICON_DOWN = '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
 const RECENT_KEY = "otori_bus_recent";
 function getRecent(){
   try { return JSON.parse(localStorage.getItem(RECENT_KEY) || "[]"); }
@@ -1630,7 +1678,7 @@ function renderRecent(){
         : `<span class="stop-next-badge badge-ok">あと${nextMins}分</span>`;
     const active = name===selStop ? " active" : "";
     return `<div class="recent-item${active}" onclick="selectStop('${name.replace(/'/g,"\'")}')">
-      <span class="recent-icon">🕐</span>
+      <span class="recent-icon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg></span>
       <div style="flex:1;min-width:0">
         <div class="recent-name">${name}</div>
         <div class="recent-route">${routeStr}</div>
@@ -1686,7 +1734,7 @@ function toggleFavorite(name){
 function favStarBtn(name){
   const fav = isFavorite(name);
   const safe = name.replace(/'/g,"\\'");
-  return `<button class="fav-star-btn${fav?" active":""}" onclick="event.stopPropagation(); toggleFavorite('${safe}')" aria-label="${fav?"お気に入りから外す":"お気に入りに登録"}">${fav?"★":"☆"}</button>`;
+  return `<button class="fav-star-btn${fav?" active":""}" onclick="event.stopPropagation(); toggleFavorite('${safe}')" aria-label="${fav?"お気に入りから外す":"お気に入りに登録"}">${fav?ICON_STAR_F:ICON_STAR}</button>`;
 }
 
 /* ── お気に入りエリア描画 ── */
@@ -1786,7 +1834,7 @@ function renderStops(){
   // ── 未入力かつGPS未取得 → 検索を促す ──
   if(q.length < 1){
     container.innerHTML = `<div class="search-prompt">
-      <div class="search-prompt-icon">🔍</div>
+      <div class="search-prompt-icon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg></div>
       バス停名を入力して検索するか、<br>
       現在地ボタンで近くのバス停を探せます<br>
       <strong>例）読谷、JAゆんた、高志保</strong>
@@ -1882,7 +1930,7 @@ function renderSelectedBar(){
       <div class="ssb-chips">${chips}</div>
     </div>
     <div style="display:flex;flex-direction:column;gap:6px;align-items:stretch">
-    <button class="ssb-fav-btn${isFav?" active":""}" onclick="toggleFavorite('${selStop.replace(/'/g,"\'")}')" aria-label="${isFav?"お気に入りから外す":"お気に入りに登録"}">${isFav?"★":"☆"}</button>
+    <button class="ssb-fav-btn${isFav?" active":""}" onclick="toggleFavorite('${selStop.replace(/'/g,"\'")}')" aria-label="${isFav?"お気に入りから外す":"お気に入りに登録"}">${isFav?ICON_STAR_F:ICON_STAR}</button>
     <button class="ssb-change-btn" onclick="changeStop()">
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
       検索に戻る
@@ -1956,7 +2004,7 @@ function renderApproach(){
       body = `<div class="approach-track">
           <div class="approach-track-line"></div>
           <div class="approach-track-dots">${dots}</div>
-          <div class="approach-bus" style="left:${busLeft}%;background:${color}">🚌</div>
+          <div class="approach-bus" style="left:${busLeft}%;background:${color}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="15" rx="3"/><path d="M5 11h14M8.5 21v-3M15.5 21v-3M8.5 14.5h.01M15.5 14.5h.01"/></svg></div>
         </div>
         <div class="approach-track-labels"><span>当停留所</span><span>1つ前</span><span>2つ前</span><span>${lastLabel}</span></div>
         <div class="approach-foot">
@@ -1976,7 +2024,7 @@ function renderApproach(){
   area.innerHTML = `<div class="approach-section">
     <div class="approach-head">
       <span>接近情報（時刻表に基づく推定）</span>
-      <span class="approach-refresh" onclick="renderApproach()">↻ 更新</span>
+      <span class="approach-refresh" onclick="renderApproach()"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.4-5.7L20 8.5"/><path d="M20 4v4.5h-4.5"/></svg> 更新</span>
     </div>
     <div class="approach-list">${cardsHtml}</div>
   </div>`;
@@ -1998,7 +2046,7 @@ function renderTimetable(){
   if(!selStop){ area.innerHTML=""; return; }
   const routes = ROUTES[dayType].filter(r=>r.stops.some(([n])=>n===selStop));
   if(!routes.length){
-    area.innerHTML = `<div class="empty-state"><div class="empty-icon">🕐</div>本日この停留所の運行はありません</div>`;
+    area.innerHTML = `<div class="empty-state"><div class="empty-icon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg></div>本日この停留所の運行はありません</div>`;
     return;
   }
   const withTime = routes.map(r=>{
@@ -2053,7 +2101,7 @@ function renderCards(){
   const routes = ROUTES[dayType].filter(r=>r.stops.some(([n])=>n===selStop));
 
   if(!routes.length){
-    area.innerHTML=`<div class="empty-state"><div class="empty-icon">🕐</div>本日この停留所の運行はありません</div>`;
+    area.innerHTML=`<div class="empty-state"><div class="empty-icon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg></div>本日この停留所の運行はありません</div>`;
     return;
   }
 
@@ -2068,7 +2116,7 @@ function renderCards(){
     if(idx<0)return "";
     const before = idx>0?r.stops[idx-1][0]:"";
     const after  = idx<r.stops.length-1?r.stops[idx+1][0]:"";
-    return [before&&`← ${before}`,after&&`→ ${after}`].filter(Boolean).join("　");
+    return [before&&`<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg> ${before}`,after&&`<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg> ${after}`].filter(Boolean).join("　");
   }
 
   const futureTimes = withTime.filter(x=>t2m(x.time)>=now);
@@ -2097,7 +2145,7 @@ function renderCards(){
     <span class="cards-stop-name">${selStop}</span>
     <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
       <a href="${mapUrl}" target="_blank" rel="noopener" class="map-link-btn">
-        🗺 地図
+        <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7l6-3 6 3 6-3v13l-6 3-6-3-6 3z"/><path d="M9 4v13M15 7v13"/></svg> 地図
       </a>
       <span class="cards-route-pill">全${withTime.length}便</span>
     </div>
@@ -2105,14 +2153,14 @@ function renderCards(){
 
   // ── 案内文 ──
   html += `<div class="timetable-notice">
-    <span class="notice-icon">ℹ️</span>
+    <span class="notice-icon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.6v.1"/></svg></span>
     交通状況により、実際の時刻と異なる場合があります。
   </div>`;
 
   // ── 通過済みバー（上部：古い便の展開ボタン） ──
   if(hiddenPastCount > 0 && !showPast){
     html += `<div class="past-toggle-row" onclick="togglePast('${selStop.replace(/'/g,"\'")}')">
-      <span>▲ さらに古い便を表示</span>
+      <span><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg> さらに古い便を表示</span>
       <span class="past-count-badge">${hiddenPastCount}便</span>
     </div>`;
   }
@@ -2159,20 +2207,20 @@ function renderCards(){
         </div>
         <div class="card-info">
           <div class="card-service-id">${r.label}</div>
-          <div class="card-route-line">${r.dep} → ${r.arr}　所要${r.dur}分</div>
+          <div class="card-route-line">${r.dep} <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg> ${r.arr}　所要${r.dur}分</div>
           ${via?`<div class="card-route-line" style="margin-top:1px;font-size:11px;color:#888">${via}</div>`:""}
         </div>
-        <button class="card-toggle-btn${isOpen?" open":""}" onclick="toggleCard('${r.id}')" aria-label="経路を${isOpen?"閉じる":"開く"}">${isOpen?"▲":"▼"}</button>
+        <button class="card-toggle-btn${isOpen?" open":""}" onclick="toggleCard('${r.id}')" aria-label="経路を${isOpen?"閉じる":"開く"}">${isOpen?ICON_UP:ICON_DOWN}</button>
       </div>
       <div class="card-stops${isOpen?" open":""}" id="stops-${r.id}">${stopRows}</div>
       ${isMapOpen
         ? `<div class="route-map-wrap">
             <div class="route-map-label">ルートマップ</div>
             <div class="route-map-scroll">${mapSvg}</div>
-            <button class="map-toggle-btn" onclick="toggleMap('${r.id}')">▲ マップを閉じる</button>
+            <button class="map-toggle-btn" onclick="toggleMap('${r.id}')"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg> マップを閉じる</button>
            </div>`
         : `<div style="padding:6px 14px 10px">
-            <button class="map-toggle-btn" onclick="toggleMap('${r.id}')">🗺 ルートマップを表示</button>
+            <button class="map-toggle-btn" onclick="toggleMap('${r.id}')"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7l6-3 6 3 6-3v13l-6 3-6-3-6 3z"/><path d="M9 4v13M15 7v13"/></svg> ルートマップを表示</button>
            </div>`}
     </div>`;
   }
@@ -2182,19 +2230,19 @@ function renderCards(){
   // ── 便の展開バー ──
   if(!showMore && hiddenCardCount > 0){
     html += `<div class="more-cards-row" onclick="toggleMoreCards('${selStop.replace(/'/g,"\'")}')">
-      <span>▼ 残りの便を表示</span>
+      <span><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg> 残りの便を表示</span>
       <span class="more-cards-count">あと${hiddenCardCount}便</span>
     </div>`;
   } else if(showMore && displayTimes.length > CARD_LIMIT){
     html += `<div class="more-cards-row" onclick="toggleMoreCards('${selStop.replace(/'/g,"\'")}')">
-      <span>▲ 便を折りたたむ</span>
+      <span><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg> 便を折りたたむ</span>
     </div>`;
   }
 
   // ── 通過済みバー（下部：展開中のとき折りたたむボタン） ──
   if(pastTimes.length > 0 && showPast){
     html += `<div class="past-toggle-row" onclick="togglePast('${selStop.replace(/'/g,"\'")}')">
-      <span>▲ 古い便を折りたたむ</span>
+      <span><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg> 古い便を折りたたむ</span>
       <span class="past-count-badge">${pastTimes.length}便</span>
     </div>`;
   }
@@ -2279,7 +2327,7 @@ function buildMiniMap(route, currentStop){
     }
 
     // ラベル
-    const label = (isDep && isArr) ? `${sn} (発着)` : isDep ? `${sn} ▶` : isArr ? `${sn} ◀` : sn;
+    const label = (isDep && isArr) ? `${sn} (発着)` : isDep ? `${sn}（発）` : isArr ? `${sn}（着）` : sn;
     const dispName = label.length > 14 ? label.slice(0,13)+"…" : label;
     svg += `<text x="${TEXT_X}" y="${y+1}" dominant-baseline="middle" font-family="'Noto Sans JP',sans-serif" font-size="14" fill="${txtCol}" font-weight="${fwt}">${dispName}</text>`;
 
@@ -2337,7 +2385,7 @@ function buildMenu(){
   const now = nowM();
   const routeMap = getRouteStops(dayType);
 
-  body.innerHTML = [...routeMap.entries()].map(([routeName, stopMap])=>{
+  body.innerHTML = `<div class="menu-guide">ルートをおすと、バス停がならびます。バス停をおすと、時刻が出ます。</div>` + [...routeMap.entries()].map(([routeName, stopMap])=>{
     const color = ROUTE_COLORS[routeName] || "#888";
     const stops = [...stopMap.keys()];
     const isOpen = openRoutes.has(routeName);
@@ -2353,10 +2401,10 @@ function buildMenu(){
       const badgeCls = nextMins===null ? "sub-badge-done" : nextMins<=10 ? "sub-badge-soon" : "sub-badge-ok";
       const badgeTxt = nextMins===null ? "終了" : `${nextMins}分`;
       const active = sn===selStop ? " active" : "";
-      return `<div class="stop-sub-item${active}" onclick="selectFromMenu('${sn.replace(/'/g,"\'")}')">
+      return `<button class="stop-sub-item${active}" onclick="selectFromMenu('${sn.replace(/'/g,"\'")}')">
         <span>${sn}</span>
-        <span class="stop-sub-next ${badgeCls}">${badgeTxt}</span>
-      </div>`;
+        <span class="stop-sub-next ${badgeCls}">${badgeTxt === "終了" ? "今日は終了" : "あと" + badgeTxt}</span>
+      </button>`;
     }).join("");
 
     return `<div class="route-group">
@@ -2366,7 +2414,7 @@ function buildMenu(){
           ${routeName}
           <span class="route-count">${stops.length}停留所</span>
         </div>
-        <span class="route-chevron">▼</span>
+        <span class="route-chevron"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span>
       </button>
       <div class="stop-sub-list${isOpen?" open":""}">${stopItems}</div>
     </div>`;
@@ -2412,7 +2460,7 @@ function buildMapMenu(){
   if(!body) return;
   const tripMap = getRouteTrips(dayType);
 
-  body.innerHTML = [...tripMap.entries()].map(([routeName, trips])=>{
+  body.innerHTML = `<div class="menu-guide">ルートをおして、見たい便をえらぶと、通るバス停の地図が出ます。</div>` + [...tripMap.entries()].map(([routeName, trips])=>{
     const color = ROUTE_COLORS[routeName] || "#888";
     const isOpen = openMapRoutes.has(routeName);
 
@@ -2422,10 +2470,10 @@ function buildMapMenu(){
       return `<div>
         <button class="map-trip-btn${tOpen?" open":""}" onclick="toggleMapTrip('${r.id}')">
           <span>${r.label}</span>
-          <span class="map-trip-chevron">▼</span>
+          <span class="map-trip-chevron"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span>
         </button>
         ${tOpen ? `<div class="route-map-wrap">
-          <div class="route-map-label">${r.dep} → ${r.arr}</div>
+          <div class="route-map-label">${r.dep} <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg> ${r.arr}</div>
           <div class="route-map-scroll">${mapSvg}</div>
         </div>` : ""}
       </div>`;
@@ -2438,7 +2486,7 @@ function buildMapMenu(){
           ${routeName}
           <span class="route-count">${trips.length}便</span>
         </div>
-        <span class="route-chevron">▼</span>
+        <span class="route-chevron"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span>
       </button>
       <div class="map-trip-list${isOpen?" open":""}">${tripItems}</div>
     </div>`;
@@ -2739,7 +2787,7 @@ function lmTick(){
   if(selB){
     const mins = Math.max(1, Math.ceil(selB.secsToNext/60));
     const col = ROUTE_COLORS[selB.r.route] || "#888";
-    info.innerHTML = `<span class="lm-bi-label" style="color:${col}">● ${selB.r.label}</span>　次は <span class="lm-bi-next">${selB.nextName}</span> ${selB.nextTime} 着予定（あと約${mins}分）`;
+    info.innerHTML = `<span class="lm-bi-label" style="color:${col}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="6" fill="currentColor" stroke="none"/></svg> ${selB.r.label}</span>　次は <span class="lm-bi-next">${selB.nextName}</span> ${selB.nextTime} 着予定（あと約${mins}分）`;
     info.classList.add("show");
   } else {
     lmSelBus = null;
@@ -3115,7 +3163,7 @@ function spVia(r, idx){
     if(n !== r.stops[idx][0] && n !== names[names.length-1]) names.push(n);
   }
   const more = r.stops.length - 1 > idx + 3 ? " …" : "";
-  return names.join(" → ") + more;
+  return names.join(' <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg> ') + more;
 }
 function spRouteChip(route){
   const c = ROUTE_CHIP[route] || {bg:"#eee", fg:"#555"};
@@ -3402,18 +3450,18 @@ function renderPlan(scrollToResult){
   let h = `<div class="pk-card">
     <div class="pk-label">どこから</div>
     <select class="pk-select" id="pk-o" aria-label="出発するバス停">${pkOptions(pk.o)}</select>
-    <div class="pk-center"><button class="pk-pill" onclick="pkSwap()">↑↓ 出発と行き先を入れかえ</button></div>
+    <div class="pk-center"><button class="pk-pill" onclick="pkSwap()"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 20V4M4 8l4-4 4 4M16 4v16M12 16l4 4 4-4"/></svg> 出発と行き先を入れかえ</button></div>
     <div class="pk-label">どこまで</div>
     <select class="pk-select" id="pk-d" aria-label="行き先のバス停">${pkOptions(pk.d)}</select>`;
   if(!pk.v){
-    h += `<div style="margin-top:14px"><button class="pk-pill" onclick="pkAddVia()">＋ とちゅうで立ち寄る</button></div>`;
+    h += `<div style="margin-top:14px"><button class="pk-pill" onclick="pkAddVia()"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg> とちゅうで立ち寄る</button></div>`;
   } else {
     h += `<div class="pk-via">
       <div class="pk-label" style="color:#8e1f4d">とちゅうで立ち寄る場所</div>
       <select class="pk-select" id="pk-v" aria-label="立ち寄るバス停">${pkOptions(pk.v)}</select>
       <div class="pk-label" style="color:#8e1f4d;margin-top:10px">そこで過ごす時間</div>
       <div class="pk-seg">${[30,60,120].map(m => `<button class="${pk.stay === m ? "on" : ""}" onclick="pkSet('stay',${m})">${m < 60 ? m + "分" : (m/60) + "時間"}</button>`).join("")}</div>
-      <div style="text-align:right;margin-top:10px"><button class="pk-pill quiet" onclick="pkSet('v','')">✕ 立ち寄りをやめる</button></div>
+      <div style="text-align:right;margin-top:10px"><button class="pk-pill quiet" onclick="pkSet('v','')"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg> 立ち寄りをやめる</button></div>
     </div>`;
   }
   h += `<div class="pk-label" style="margin-top:14px">いつ</div>
@@ -3435,7 +3483,7 @@ function renderPlan(scrollToResult){
     pk.res.forEach((z, i) => {
       const x = z.a.x + (z.b ? z.b.x : 0), arr = z.b ? z.b.arr : z.a.arr;
       h += `<div class="pk-card"><div class="pk-res-head">${i === 0 ? "いちばん早く着く行き方" : "ほかの行き方"}</div>
-        <div class="pk-time">${pkFmt(z.a.dep)} 発 → ${pkFmt(arr)} 着</div>
+        <div class="pk-time">${pkFmt(z.a.dep)} 発 <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg> ${pkFmt(arr)} 着</div>
         <div class="pk-sub">${z.b ? "全部で" : ""}${Math.max(arr - z.a.dep, 1)}分<span class="pk-tag ${x ? "xf" : "none"}">${x ? "乗りかえ " + x + "回" : "乗りかえなし"}</span>${z.b ? `<span class="pk-tag none">立ち寄り 1か所</span>` : ""}</div>
         ${pkRouteHtml(z.a)}`;
       if(z.b){

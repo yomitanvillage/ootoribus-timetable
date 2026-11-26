@@ -2,11 +2,10 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="robots" content="noindex">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#c0306a">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<title>【テスト版】鳳バス | 読谷村コミュニティバス</title>
+<title>鳳バス | 読谷村コミュニティバス</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -1234,9 +1233,19 @@ body.tab-plan .day-bar, body.tab-guide .day-bar, body.tab-menu .day-bar { displa
 #menu-area .fare-body { display: block; margin-top: 0; }
 @media (prefers-reduced-motion: reduce) { .mn-btn:active { transform: none; } }
 </style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JCJN77EC4R"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-JCJN77EC4R', {
+    'page_title': '鳳バス時刻表アプリ',
+    'page_location': location.href
+  });
+</script>
 </head>
 <body>
-<div style="background:#333;color:#fff;text-align:center;font-size:14px;font-weight:700;padding:6px 8px">テスト版です（確認用）。ふだんは本番のページをお使いください。</div>
 
 <!-- サイドメニュー -->
 <div class="menu-overlay" id="menu-overlay" onclick="closeMenu()"></div>
